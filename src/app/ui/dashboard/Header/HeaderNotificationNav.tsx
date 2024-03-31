@@ -1,9 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBell, faEnvelope, IconDefinition } from '@fortawesome/free-regular-svg-icons'
 import {
-  faBasketShopping,
   faChartBar,
-  faGaugeHigh,
   faList,
   faUserMinus,
   faUserPlus,
@@ -70,20 +68,6 @@ export default function HeaderNotificationNav() {
               <DropdownItem>
                 <ItemWithIcon icon={faChartBar}>
                   Sales report is ready
-                </ItemWithIcon>
-              </DropdownItem>
-            </Link>
-            <Link href="#" passHref legacyBehavior>
-              <DropdownItem>
-                <ItemWithIcon icon={faBasketShopping}>
-                  New client
-                </ItemWithIcon>
-              </DropdownItem>
-            </Link>
-            <Link href="#" passHref legacyBehavior>
-              <DropdownItem>
-                <ItemWithIcon icon={faGaugeHigh}>
-                  Server overloaded
                 </ItemWithIcon>
               </DropdownItem>
             </Link>

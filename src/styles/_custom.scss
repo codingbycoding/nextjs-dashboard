@@ -1,0 +1,19 @@
+.container-zero-margin {
+    margin: 0;
+    padding: 0;
+}
+
+output {
+    display: block;
+}
+
+.calc-entry th,
+.calc-entry td {
+    min-width: 120px;
+}
+
+@media print {
+    .element-to-hide-when-print {
+      display: none !important;
+    }
+  }

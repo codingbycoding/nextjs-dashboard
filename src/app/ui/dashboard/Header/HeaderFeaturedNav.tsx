@@ -16,7 +16,7 @@ export default function HeaderFeaturedNav() {
       </NavItem>
       <NavItem>
         <Link href="#" passHref legacyBehavior>
-          <NavLink className="p-2">Settings</NavLink>
+          <NavLink className="p-2">设置</NavLink>
         </Link>
       </NavItem>
     </Nav>

@@ -9,8 +9,8 @@ export default function Page() {
         <Row>
           <Col md={7} className="bg-white border p-5">
             <div>
-              <h1>Login</h1>
-              <p className="text-black-50">Sign In to your account</p>
+              <h1>登陆账号</h1>
+              <p className="text-black-50">请先登陆账号</p>
 
               <LoginForm />
             </div>
@@ -20,13 +20,12 @@ export default function Page() {
             className="bg-primary text-white d-flex align-items-center justify-content-center p-5"
           >
             <div className="text-center">
-              <h2>Sign up</h2>
+              <h2>注册账号</h2>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua.
+                请先注册
               </p>
               <Link className="btn btn-lg btn-outline-light mt-3" href="/register">
-                Register Now!
+                立刻注册!
               </Link>
             </div>
           </Col>

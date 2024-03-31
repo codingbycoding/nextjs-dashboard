@@ -69,14 +69,6 @@ export default function HeaderProfileNav() {
           </Link>
           <Link href="#" passHref legacyBehavior>
             <DropdownItem>
-              <ItemWithIcon icon={faEnvelopeOpen}>
-                Updates
-                <Badge bg="success" className="ms-2">42</Badge>
-              </ItemWithIcon>
-            </DropdownItem>
-          </Link>
-          <Link href="#" passHref legacyBehavior>
-            <DropdownItem>
               <ItemWithIcon icon={faListCheck}>
                 Tasks
                 <Badge bg="danger" className="ms-2">42</Badge>
@@ -117,11 +109,6 @@ export default function HeaderProfileNav() {
 
           <DropdownDivider />
 
-          <Link href="#" passHref legacyBehavior>
-            <DropdownItem>
-              <ItemWithIcon icon={faLock}>Lock Account</ItemWithIcon>
-            </DropdownItem>
-          </Link>
           <HeaderLogout>
             <DropdownItem>
               <ItemWithIcon icon={faPowerOff}>Logout</ItemWithIcon>

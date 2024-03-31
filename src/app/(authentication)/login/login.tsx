@@ -4,8 +4,8 @@ import {
   Alert, Button, Col, Form, FormControl, InputGroup, Row,
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser } from '@fortawesome/free-regular-svg-icons'
-import { faLock } from '@fortawesome/free-solid-svg-icons'
+// import { faUser } from '@fortawesome/free-regular-svg-icons'
+import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
 import { deleteCookie, getCookie } from 'cookies-next'
@@ -37,7 +37,9 @@ export default function Login() {
     try {
       const res = await axios.post('api/mock/login')
       if (res.status === 200) {
-        router.push(getRedirect())
+        const getRedirectVal = getRedirect()
+        console.log('getRedirectVal:', getRedirectVal)
+        router.push(getRedirectVal)
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -102,13 +104,12 @@ export default function Login() {
               type="submit"
               disabled={submitting}
             >
-              Login
+              登陆
             </Button>
           </Col>
           <Col xs={6} className="text-end">
             <Link className="px-0" href="#">
-              Forgot
-              password?
+              忘记密码?
             </Link>
           </Col>
         </Row>

@@ -13,7 +13,7 @@ export default function Header() {
         <HeaderSidebarToggler />
         <Link href="/" className="header-brand d-md-none">
           <svg width="80" height="46">
-            <title>CoreUI Logo</title>
+            <title>大金门窗软件</title>
             <use xlinkHref="/assets/brand/coreui.svg#full" />
           </svg>
         </Link>

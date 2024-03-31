@@ -4,8 +4,8 @@ import {
   Alert, Button, Form, FormControl, InputGroup,
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faUser } from '@fortawesome/free-regular-svg-icons'
-import { faLock } from '@fortawesome/free-solid-svg-icons'
+// import { faUser } from '@fortawesome/free-regular-svg-icons'
+import { faUser, faLock, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
 import { deleteCookie, getCookie } from 'cookies-next'
@@ -64,15 +64,15 @@ export default function Register() {
 
         <InputGroup className="mb-3">
           <InputGroupText>
-            <FontAwesomeIcon icon={faEnvelope} fixedWidth />
+            <FontAwesomeIcon icon={faPhone} fixedWidth />
           </InputGroupText>
           <FormControl
-            type="email"
-            name="email"
+            type="mobile"
+            name="mobile"
             required
             disabled={submitting}
-            placeholder="Email"
-            aria-label="Email"
+            placeholder="Mobile"
+            aria-label="Mobile"
           />
         </InputGroup>
 
@@ -101,7 +101,7 @@ export default function Register() {
         </InputGroup>
 
         <Button type="submit" className="d-block w-100" disabled={submitting} variant="success">
-          Create Account
+          创建账户
         </Button>
       </Form>
     </>

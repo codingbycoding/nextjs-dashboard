@@ -7,7 +7,7 @@ export default function Breadcrumb() {
         linkProps={{ className: 'text-decoration-none' }}
         href="/"
       >
-        Home
+        主页
       </BreadcrumbItem>
       <BreadcrumbItem
         linkProps={{ className: 'text-decoration-none' }}
