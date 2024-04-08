@@ -7,6 +7,8 @@ type Middleware = (request: NextRequest) => NextResponse
 const redirectIfAuthenticated: Middleware = (request) => {
   const authSession = request.cookies.get('auth')?.value
 
+  console.debug('redirectIfAuthenticated authSession:%s', authSession)
+
   if (authSession) {
     return NextResponse.redirect(new URL('/', request.url))
   }
@@ -31,16 +33,17 @@ const authenticated: Middleware = (request) => {
 
 export default function middleware(request: NextRequest) {
   // Uncomment if you want to redirect if authenticated.
-  // if ([
-  //   '/login',
-  //   '/register',
-  // ].includes(request.nextUrl.pathname)) {
-  //   return redirectIfAuthenticated(request)
-  // }
+  if ([
+    '/login',
+    '/register',
+  ].includes(request.nextUrl.pathname)) {
+    return redirectIfAuthenticated(request)
+  }
 
   if ([
     '/',
     '/pokemons',
+    '/calculation',
   ].includes(request.nextUrl.pathname)) {
     return authenticated(request)
   }

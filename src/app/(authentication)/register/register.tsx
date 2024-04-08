@@ -13,6 +13,8 @@ import axios from 'axios'
 import InputGroupText from 'react-bootstrap/InputGroupText'
 
 export default function Register() {
+  const redirectURL = '/calculation'
+
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -24,7 +26,7 @@ export default function Register() {
       return redirect.toString()
     }
 
-    return '/'
+    return redirectURL
   }
 
   const register = async (e: SyntheticEvent) => {

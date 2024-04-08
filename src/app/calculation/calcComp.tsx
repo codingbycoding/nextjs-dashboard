@@ -228,7 +228,7 @@ export default function CalcComp({ idd }) {
         }}
       >
         <label htmlFor={`guang_gou-${idd}`}>
-          {selectedOption === 'b' ? '光勾(2支)' : '光勾(4支)'}
+          {selectedOption === 'b' ? '光企(2支)' : '光企(4支)'}
         </label>
         <output id={`guang_gou-${idd}`}>{Number.isNaN(outputs.guangGou) ? '' : outputs.guangGou}</output>
       </div>
