@@ -1,8 +1,6 @@
 'use client'
 
-import {
-  Alert, Button, Form, FormControl, InputGroup,
-} from 'react-bootstrap'
+import { Alert, Button, Form, FormControl, InputGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { faUser, faLock, faPhone } from '@fortawesome/free-solid-svg-icons'
@@ -12,12 +10,16 @@ import { deleteCookie, getCookie } from 'cookies-next'
 import axios from 'axios'
 import InputGroupText from 'react-bootstrap/InputGroupText'
 
+import type { User } from '@/models/user'
+
 export default function Register() {
   const redirectURL = '/calculation'
 
   const router = useRouter()
+  const [user, setUser] = useState({} as User)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [passwordRepeat, setPasswordRepeated] = useState('')
 
   const getRedirect = () => {
     const redirect = getCookie('redirect')
@@ -33,10 +35,17 @@ export default function Register() {
     e.stopPropagation()
     e.preventDefault()
 
+    console.log('user.password:', user.password, 'passwordRepeat:', passwordRepeat)
+    if (user.password !== passwordRepeat) {
+      setError('密码不匹配')
+      console.log('return')
+      return
+    }
+
     setSubmitting(true)
 
     try {
-      const res = await axios.post('api/mock/login')
+      const res = await axios.post('api/mock/register', user)
       if (res.status === 200) {
         router.push(getRedirect())
       }
@@ -59,8 +68,12 @@ export default function Register() {
             name="username"
             required
             disabled={submitting}
-            placeholder="Username"
+            placeholder="用户名"
             aria-label="Username"
+            onChange={(e) => setUser({
+              ...user,
+              name: e.target.value,
+            })}
           />
         </InputGroup>
 
@@ -73,8 +86,12 @@ export default function Register() {
             name="mobile"
             required
             disabled={submitting}
-            placeholder="Mobile"
+            placeholder="手机号"
             aria-label="Mobile"
+            onChange={(e) => setUser({
+              ...user,
+              mobile: e.target.value,
+            })}
           />
         </InputGroup>
 
@@ -85,8 +102,12 @@ export default function Register() {
             name="password"
             required
             disabled={submitting}
-            placeholder="Password"
+            placeholder="密码"
             aria-label="Password"
+            onChange={(e) => setUser({
+              ...user,
+              password: e.target.value,
+            })}
           />
         </InputGroup>
 
@@ -97,8 +118,9 @@ export default function Register() {
             name="password_repeat"
             required
             disabled={submitting}
-            placeholder="Repeat password"
+            placeholder="确认 密码"
             aria-label="Repeat password"
+            onChange={(e) => setPasswordRepeated(e.target.value)}
           />
         </InputGroup>
 

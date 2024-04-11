@@ -10,11 +10,16 @@ export default function CalcComp({ idd }) {
   }
 
   interface OutputValues {
-    guangGou: number;
+    order_id: string;
+    note: string; // 备注
+    format: string;
+    width: number;
+    height: number;
+    shangXiaGui: number;
     shangXiaFang: number;
+    guangQi: number;
     gouQi: number;
     bianFeng: number;
-    shangXiaGui: number;
     glassWidth: number;
     glassHeight: number;
   }
@@ -70,7 +75,7 @@ export default function CalcComp({ idd }) {
     const glassHeightVal = guangGouVal - 148
 
     return {
-      guangGou: guangGouVal,
+      guangQi: guangGouVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: gouQiVal,
       bianFeng: bianFengVal,
@@ -92,7 +97,7 @@ export default function CalcComp({ idd }) {
     const glassHeightVal = guangGouVal - 18
 
     return {
-      guangGou: guangGouVal,
+      guangQi: guangGouVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: 0,
       bianFeng: bianFengVal,
@@ -115,7 +120,7 @@ export default function CalcComp({ idd }) {
     const glassHeightVal = guangGouVal - 18
 
     return {
-      guangGou: guangGouVal,
+      guangQi: guangGouVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: gouQiVal,
       bianFeng: bianFengVal,
@@ -132,7 +137,7 @@ export default function CalcComp({ idd }) {
   }
 
   const formatOutput = (lval: OutputValues) : OutputValues => ({
-    guangGou: formatValue(lval.guangGou, 1),
+    guangQi: formatValue(lval.guangQi, 1),
     shangXiaFang: formatValue(lval.shangXiaFang, 1),
     gouQi: formatValue(lval.gouQi, 1),
     bianFeng: formatValue(lval.bianFeng, 1),
@@ -230,7 +235,7 @@ export default function CalcComp({ idd }) {
         <label htmlFor={`guang_gou-${idd}`}>
           {selectedOption === 'b' ? '光企(2支)' : '光企(4支)'}
         </label>
-        <output id={`guang_gou-${idd}`}>{Number.isNaN(outputs.guangGou) ? '' : outputs.guangGou}</output>
+        <output id={`guang_gou-${idd}`}>{Number.isNaN(outputs.guangQi) ? '' : outputs.guangQi}</output>
       </div>
 
       <div

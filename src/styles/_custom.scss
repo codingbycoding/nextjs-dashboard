@@ -26,16 +26,32 @@ table {
     width: 100%;
 }
 
+/*
 .calc-entry th,
 .calc-entry td {
     min-width: 80px;
     white-space: nowrap;
     padding: 0px 5px;
 }
+*/
 
 .calcEntry {
     display: auto;
 }
+
+.calc-entry th,
+.calc-entry td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left; /* Align text to the left */
+}
+
+.calc-entry td:hover {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: initial;
+  }
 
 @media print {
     .element-to-hide-when-print {

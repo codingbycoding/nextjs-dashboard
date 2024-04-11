@@ -3,9 +3,21 @@
 const users = [
   {
     id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'User',
-    email: 'user@nextmail.com',
-    password: '123456',
+    name: '大金',
+    mobile: '15618953660',
+    password: '953660',
+  },
+  {
+    id: '410544b2-4001-4271-9855-fec4b6a6442a',
+    name: 'adam',
+    mobile: '16628586024',
+    password: '586024',
+  },
+  {
+    id: '410544b2-4001-4271-9855-fec4b6a6442a',
+    name: '二钥',
+    mobile: '18521019489',
+    password: '019489',
   },
 ];
 

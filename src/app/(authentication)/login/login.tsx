@@ -5,7 +5,7 @@ import {
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faUser } from '@fortawesome/free-regular-svg-icons'
-import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faLock, faPhone} from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState, useRef } from 'react'
 
@@ -22,9 +22,6 @@ export default function Login() {
   const [error, setError] = useState('')
 
   const [user, setUser] = useState({})
-
-  const usernameRef = useRef(null)
-  const passwordRef = useRef(null)
 
   const getRedirect = () => {
     const redirect = getCookie('redirect')
@@ -79,21 +76,20 @@ export default function Login() {
         <InputGroup className="mb-3">
           <InputGroupText>
             <FontAwesomeIcon
-              icon={faUser}
+              icon={faPhone}
               fixedWidth
             />
           </InputGroupText>
           <FormControl
-            name="username"
-            ref={usernameRef}
+            name="mobile"
             required
             disabled={submitting}
-            placeholder="Username"
-            aria-label="Username"
-            defaultValue="Username"
+            placeholder="手机号"
+            aria-label="mobile"
+            defaultValue=""
             onChange={(e) => setUser({
               ...user,
-              name: e.target.value,
+              mobile: e.target.value,
             })}
           />
         </InputGroup>
@@ -108,12 +104,11 @@ export default function Login() {
           <FormControl
             type="password"
             name="password"
-            ref={passwordRef}
             required
             disabled={submitting}
-            placeholder="Password"
+            placeholder="密码"
             aria-label="Password"
-            defaultValue="Password"
+            defaultValue=""
             onChange={(e) => setUser({
               ...user,
               password: e.target.value,

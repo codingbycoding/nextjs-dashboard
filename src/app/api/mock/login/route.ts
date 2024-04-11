@@ -1,11 +1,7 @@
 import { serializeCookie } from '@/lib/cookie'
-
-let counter = 1
+import { getUserByMobile, comparePassword } from '@/models/user'
 
 async function oddReturn(request : Request) {
-  counter += 1
-  const boolVal = counter % 2 === 0
-
   /*
   request.formData().then((data) => {
     console.log(data)
@@ -13,7 +9,16 @@ async function oddReturn(request : Request) {
   })
   */
 
-  let userName
+  const data = await request.json()
+  const user = await getUserByMobile(data.mobile)
+  if (user === undefined && user === null) {
+    console.log('user', user)
+    return Response.json({ login: false, error: 'name is not adam' }, { status: 401 })
+  }
+
+  const match = await comparePassword(data.password, user)
+
+  /*
   await request.json().then((data) => {
     console.debug(data)
 
@@ -23,42 +28,22 @@ async function oddReturn(request : Request) {
       return 1
     }
 
-    if (data.name !== 'adam') {
-      // return Response.json({ login: boolVal, error: 'name is not adam' }, { status: 401 })
-      return 1
-    }
+    await getUser(data.name).then((user) => {
+    })
+
     // do something with the formdata sent in the request
     return 0
   }).catch((e) => e)
-
-  console.debug('counter:%d, boolVal:', counter, boolVal)
-
-  /*
-  if (!boolVal) {
-    // Redirect the user to the login page
-    // Response.writeHead(302, { Location: '/login' })
-    // res.end()
-    // return
-
-    // return Response.redirect('/login', 401)
-    // return Response.redirect(new URL('/login'))
-
-    return Response.json({ login: boolVal }, { status: 401 })
-  }
   */
 
-  console.debug('The End. userName:%s', userName)
+  console.debug('The End. user.name:%s', user?.name)
 
-  if (userName === 'adam') {
-    const cookie = serializeCookie('auth', { user: { name: userName } }, { path: '/' })
-    return Response.json({ login: boolVal }, {
-      headers: {
-        'Set-Cookie': cookie,
-      },
-    })
+  if (!match) {
+    return Response.json({ login: false, error: 'user not found' }, { status: 401 })
   }
 
-  return Response.json({ login: boolVal, error: 'name is not adam' }, { status: 401 })
+  const cookie = serializeCookie('auth', { user: { name: user?.name } }, { path: '/' })
+  return Response.json({ login: true }, { headers: { 'Set-Cookie': cookie } })
 }
 
 export async function POST(request : Request) {

@@ -5,6 +5,7 @@
   "scripts": {
     "seed": "node -r dotenv/config ./scripts/seed.js",
     "seed.postgres": "node -r dotenv/config ./scripts/seed.postgres.mjs",
+    "seed.schemas": "node -r dotenv/config ./scripts/seed.schemas.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

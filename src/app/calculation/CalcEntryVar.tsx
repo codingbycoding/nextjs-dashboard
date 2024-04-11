@@ -2,7 +2,7 @@
 
 import { Button } from 'antd'
 
-const CalcEntry = ({ order_id }) => {
+const CalcEntryVar = ({ order }) => {
   const printTable = () => {
     const printContents = document.getElementById('print-area').innerHTML
     const originalContents = document.body.innerHTML
@@ -12,7 +12,7 @@ const CalcEntry = ({ order_id }) => {
   }
 
   const deleteOrder = () => {
-    console.log('order_id:%s', order_id)
+    console.log('order_id:%s', order.id)
   }
 
   return (
@@ -20,7 +20,7 @@ const CalcEntry = ({ order_id }) => {
       <table className="calc-entry">
         <thead>
           <tr>
-            <th>单号</th>
+            <th>日期</th>
             <th>备注</th>
             <th>类型</th>
             <th>宽</th>
@@ -36,18 +36,18 @@ const CalcEntry = ({ order_id }) => {
         </thead>
         <tbody>
           <tr>
-            <td>{ order_id ?? '2024-03-31-001' }</td>
-            <td>张三 沟口</td>
-            <td>极窄双扇1635</td>
-            <td>2100</td>
-            <td>1800</td>
-            <td>1719</td>
-            <td>1719</td>
-            <td>699.3</td>
-            <td>1800</td>
-            <td>2096</td>
-            <td>681.3</td>
-            <td>1701</td>
+            <td>{ order.timestamp }</td>
+            <td>{ order.note }</td>
+            <td>{ order.format_id }</td>
+            <td>{ order.width }</td>
+            <td>{ order.height }</td>
+            <td>{ order.guang_qi }</td>
+            <td>{ order.gou_qi }</td>
+            <td>{ order.shang_xia_fang }</td>
+            <td>{ order.bian_feng }</td>
+            <td>{ order.shang_xia_gui }</td>
+            <td>{ order.glass_width }</td>
+            <td>{ order.glass_height }</td>
           </tr>
         </tbody>
       </table>
@@ -61,4 +61,4 @@ const CalcEntry = ({ order_id }) => {
   )
 }
 
-export default CalcEntry
+export default CalcEntryVar
