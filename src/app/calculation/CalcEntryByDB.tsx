@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import CalcEntryVar from './CalcEntryVar'
-import { Order } from '../../models/order'
 
-const CalcEntryByDB = ({ userID }) => {
+import { Order } from '@/models/models'
+import CalcEntryVar from './CalcEntryVar'
+
+const CalcEntryByDB = ({ userID } : { userID: number }) => {
   const [dbOrders, setDbOrders] = useState([])
 
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const res = await axios.post('/api/mock/orders', { user_id: userID })
+        const res = await axios.get('/api/mock/orders')
         if (res.status === 200) {
           console.log('dbOrders:', res.data.orders)
           setDbOrders(res.data.orders)
@@ -26,7 +27,7 @@ const CalcEntryByDB = ({ userID }) => {
 
   return (
     <div>
-      {dbOrders.map((order) => (
+      {dbOrders.map((order : Order) => (
         <CalcEntryVar key={order.id} order={order} />
       ))}
     </div>

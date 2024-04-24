@@ -2,35 +2,23 @@
 
 import { useState } from 'react'
 import { Button } from 'antd'
+import axios from 'axios'
+import { Order } from '@/models/models'
 
-export default function CalcComp({ idd }) {
-  interface Option {
-    value: string;
-    label: string;
-  }
+interface Option {
+  value: string;
+  label: string;
+}
 
-  interface OutputValues {
-    order_id: string;
-    note: string; // 备注
-    format: string;
-    width: number;
-    height: number;
-    shangXiaGui: number;
-    shangXiaFang: number;
-    guangQi: number;
-    gouQi: number;
-    bianFeng: number;
-    glassWidth: number;
-    glassHeight: number;
-  }
+const options: Option[] = [
+  { value: 'a', label: '打85移门料子' },
+  { value: 'b', label: '极窄双扇1635' },
+  { value: 'c', label: '极窄三联动1635(不锈钢下轨)' },
+]
 
-  const options: Option[] = [
-    { value: 'a', label: '打85移门料子' },
-    { value: 'b', label: '极窄双扇1635' },
-    { value: 'c', label: '极窄三联动1635(不锈钢下轨)' },
-  ]
-
+export default function CalcComp({ idd }:{ idd:number }) {
   const [selectedOption, setSelectedOption] = useState<string>('a')
+  const [note, setNote] = useState<string>('')
   const [width, setWidth] = useState<string>('')
   const [height, setHeight] = useState<string>('')
   const [widthError, setWidthError] = useState<string>('')
@@ -62,72 +50,72 @@ export default function CalcComp({ idd }) {
     }
   }
 
-  const calculateOutputA = (lwidth: string, lheight: string) : OutputValues => {
+  const calculateOutputA = (lwidth: string, lheight: string) : Order => {
     const widthVal = parseFloat(lwidth)
     const heightVal = parseFloat(lheight)
 
-    const guangGouVal = heightVal - 53
+    const guangQiVal = heightVal - 53
     const shangXiaFangVal = (widthVal - 35 + 85) / 2
-    const gouQiVal = guangGouVal - 17
+    const gouQiVal = guangQiVal - 17
     const bianFengVal = heightVal
     const shangXiaGuiVal = widthVal - 56
     const glassWidthVal = shangXiaFangVal - 148
-    const glassHeightVal = guangGouVal - 148
+    const glassHeightVal = guangQiVal - 148
 
     return {
-      guangQi: guangGouVal,
+      guangQi: guangQiVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: gouQiVal,
       bianFeng: bianFengVal,
       shangXiaGui: shangXiaGuiVal,
       glassWidth: glassWidthVal,
       glassHeight: glassHeightVal,
-    }
+    } as Order
   }
 
-  const calculateOutputB = (lwidth: string, lheight: string) : OutputValues => {
+  const calculateOutputB = (lwidth: string, lheight: string) : Order => {
     const widthVal = parseFloat(lwidth)
     const heightVal = parseFloat(lheight)
 
-    const guangGouVal = heightVal - 85 + 7
+    const guangQiVal = heightVal - 85 + 7
     const shangXiaFangVal = (widthVal - 34 + 16) / 2
     const bianFengVal = heightVal
     const shangXiaGuiVal = widthVal - 4
     const glassWidthVal = shangXiaFangVal - 18
-    const glassHeightVal = guangGouVal - 18
+    const glassHeightVal = guangQiVal - 18
 
     return {
-      guangQi: guangGouVal,
+      guangQi: guangQiVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: 0,
       bianFeng: bianFengVal,
       shangXiaGui: shangXiaGuiVal,
       glassWidth: glassWidthVal,
       glassHeight: glassHeightVal,
-    }
+    } as Order
   }
 
-  const calculateOutputC = (inWidth: string, inHeight: string):OutputValues => {
+  const calculateOutputC = (inWidth: string, inHeight: string):Order => {
     const widthVal = parseFloat(inWidth)
     const heightVal = parseFloat(inHeight)
 
-    const guangGouVal = heightVal - 88 + 7
+    const guangQiVal = heightVal - 88 + 7
     const shangXiaFangVal = (widthVal - 34 + 32) / 3
-    const gouQiVal = guangGouVal
+    const gouQiVal = guangQiVal
     const bianFengVal = heightVal
     const shangXiaGuiVal = widthVal - 4
     const glassWidthVal = shangXiaFangVal - 18
-    const glassHeightVal = guangGouVal - 18
+    const glassHeightVal = guangQiVal - 18
 
     return {
-      guangQi: guangGouVal,
+      guangQi: guangQiVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: gouQiVal,
       bianFeng: bianFengVal,
       shangXiaGui: shangXiaGuiVal,
       glassWidth: glassWidthVal,
       glassHeight: glassHeightVal,
-    }
+    } as Order
   }
 
   const formatValue = (value: number, decimalPlaces: number): number => {
@@ -136,45 +124,78 @@ export default function CalcComp({ idd }) {
     return Number.parseFloat(formattedValue)
   }
 
-  const formatOutput = (lval: OutputValues) : OutputValues => ({
-    guangQi: formatValue(lval.guangQi, 1),
+  const formatOutput = (lval: Order) : Order => ({
+    guangQi: formatValue(lval?.guangQi ?? 0, 1),
     shangXiaFang: formatValue(lval.shangXiaFang, 1),
     gouQi: formatValue(lval.gouQi, 1),
     bianFeng: formatValue(lval.bianFeng, 1),
     shangXiaGui: formatValue(lval.shangXiaGui, 1),
     glassWidth: formatValue(lval.glassWidth, 1),
     glassHeight: formatValue(lval.glassHeight, 1),
+    id: 0,
+    note,
+    formatID: 0,
+    width: parseFloat(width),
+    height: parseFloat(height),
+    userID: 0,
+    timestamp: new Date(),
   })
 
-  const calculateOutputs = ():OutputValues => {
-    let outputVal = {
-      guangGou: 0,
+  const calculateOutputs = () : Order => {
+    let outputVal: Order = {
+      guangQi: 0,
       shangXiaFang: 0,
       gouQi: 0,
       bianFeng: 0,
       shangXiaGui: 0,
       glassWidth: 0,
       glassHeight: 0,
+      id: 0,
+      userID: 0,
+      formatID: 0,
+      note,
+      width: parseFloat(width),
+      height: parseFloat(height),
+      timestamp: new Date(),
     }
 
     if (widthError || heightError) return outputVal
     switch (selectedOption) {
       case 'a':
         outputVal = calculateOutputA(width, height)
-      // eslint-disable-next-line no-fallthrough
+        break
       case 'b':
         outputVal = calculateOutputB(width, height)
-      // eslint-disable-next-line no-fallthrough
+        break
       case 'c':
         outputVal = calculateOutputC(width, height)
-      // eslint-disable-next-line no-fallthrough
+        break
       default:
     }
 
+    // setOrder(outputVal)
     return formatOutput(outputVal)
   }
 
-  const outputs = calculateOutputs()
+  const order = calculateOutputs()
+
+  const handleAddOrder = async () => {
+    console.log('outputs order:', order)
+    try {
+      const res = await axios.post('api/mock/orders', order)
+      if (res.status === 200) {
+        console.log('200')
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        // setError(err.message)
+        console.log('err:', err)
+      }
+    } finally {
+      // setSubmitting(false)
+      console.log('finally')
+    }
+  }
 
   return (
     <div
@@ -190,7 +211,7 @@ export default function CalcComp({ idd }) {
         }}
       >
         <label htmlFor={`note-${idd}`}>备注</label>
-        <input type="text" id={`note-${idd}`} style={{ maxWidth: 160 }} />
+        <input type="text" id={`note-${idd}`} style={{ maxWidth: 160 }} onChange={(e) => setNote(e.target.value)} />
       </div>
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
@@ -235,7 +256,7 @@ export default function CalcComp({ idd }) {
         <label htmlFor={`guang_gou-${idd}`}>
           {selectedOption === 'b' ? '光企(2支)' : '光企(4支)'}
         </label>
-        <output id={`guang_gou-${idd}`}>{Number.isNaN(outputs.guangQi) ? '' : outputs.guangQi}</output>
+        <output id={`guang_gou-${idd}`}>{Number.isNaN(order.guangQi) ? '' : order.guangQi}</output>
       </div>
 
       <div
@@ -247,14 +268,14 @@ export default function CalcComp({ idd }) {
         <label htmlFor={`shang_xia_fang-${idd}`}>
           {selectedOption === 'c' ? '上下方(6支)' : '上下方(4支)'}
         </label>
-        <output id={`shang_xia_fang-${idd}`}>{Number.isNaN(outputs.shangXiaFang) ? '' : outputs.shangXiaFang}</output>
+        <output id={`shang_xia_fang-${idd}`}>{Number.isNaN(order.shangXiaFang) ? '' : order.shangXiaFang}</output>
       </div>
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
         <label htmlFor={`gou_qi-${idd}`}>
           {selectedOption === 'b' ? '' : '勾企'}
         </label>
-        <output id={`gou_qi-${idd}`}>{selectedOption === 'b' ? '' : numberOrEmpty(outputs.gouQi)}</output>
+        <output id={`gou_qi-${idd}`}>{selectedOption === 'b' ? '' : numberOrEmpty(order.gouQi)}</output>
 
       </div>
 
@@ -262,14 +283,14 @@ export default function CalcComp({ idd }) {
         <label htmlFor={`bian_feng-${idd}`}>
           边封
         </label>
-        <output id={`bian_feng-${idd}`}>{Number.isNaN(outputs.bianFeng) ? '' : outputs.bianFeng}</output>
+        <output id={`bian_feng-${idd}`}>{Number.isNaN(order.bianFeng) ? '' : order.bianFeng}</output>
       </div>
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
         <label htmlFor={`shang_xia_gui-${idd}`}>
           上下轨
         </label>
-        <output id={`shang_xia_gui-${idd}`}>{Number.isNaN(outputs.shangXiaGui) ? '' : outputs.shangXiaGui}</output>
+        <output id={`shang_xia_gui-${idd}`}>{Number.isNaN(order.shangXiaGui) ? '' : order.shangXiaGui}</output>
       </div>
 
       <div
@@ -281,7 +302,7 @@ export default function CalcComp({ idd }) {
         <label htmlFor={`glass_width-${idd}`}>
           玻璃宽度
         </label>
-        <output id={`glass_width-${idd}`}>{Number.isNaN(outputs.glassWidth) ? '' : outputs.glassWidth}</output>
+        <output id={`glass_width-${idd}`}>{Number.isNaN(order.glassWidth) ? '' : order.glassWidth}</output>
       </div>
 
       <div
@@ -298,9 +319,17 @@ export default function CalcComp({ idd }) {
       </div>
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
-        <Button type="primary">确认</Button>
+        <Button type="primary" onClick={handleAddOrder}>确认</Button>
       </div>
 
     </div>
   )
 }
+
+/*
+          <Button variant="success" onClick={() => router.push('/pokemons/create')}>
+            <FontAwesomeIcon icon={faPlus} fixedWidth />
+            Add new
+          </Button>
+
+*/

@@ -19,18 +19,21 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^2.0.1",
+    "@vercel/postgres": "^0.8.0",
     "antd": "^5.15.4",
     "axios": "^1.6.3",
     "axios-retry": "^4.0.0",
+    "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.2",
     "chart.js": "^4.4.1",
     "classnames": "^2.5.1",
     "cookie": "^0.6.0",
     "cookies-next": "^4.1.0",
-    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
     "next": "^14.0.4",
     "nextjs-progressloader": "^1.1.0",
     "nprogress": "^0.2.0",
+    "postgres": "^3.4.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.2",
     "react-chartjs-2": "^5.2.0",
@@ -38,8 +41,6 @@
     "react-hook-form": "^7.49.2",
     "react-paginate": "^8.2.0",
     "react-redux": "^9.0.4",
-    "@vercel/postgres": "^0.8.0",
-    "postgres": "^3.4.4",
     "swr": "^2.2.4"
   },
   "devDependencies": {
@@ -50,6 +51,7 @@
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "^6.16.0",
     "@typescript-eslint/parser": "^6.16.0",
+    "dotenv": "^16.3.1",
     "eslint": "^8.56.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
@@ -61,7 +63,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "json-server": "^0.17.4",
     "sass": "^1.69.6",
-    "dotenv": "^16.3.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "jsonwebtoken": "^9.0.2"
   }
 }

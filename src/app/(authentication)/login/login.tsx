@@ -5,9 +5,9 @@ import {
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faUser } from '@fortawesome/free-regular-svg-icons'
-import { faUser, faLock, faPhone} from '@fortawesome/free-solid-svg-icons'
+import { faUser, faLock, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/navigation'
-import { SyntheticEvent, useState, useRef } from 'react'
+import { SyntheticEvent, useState } from 'react'
 
 import { deleteCookie, getCookie } from 'cookies-next'
 import axios from 'axios'
@@ -41,13 +41,6 @@ export default function Login() {
 
     try {
       const res = await axios.post('api/mock/login', user)
-      /*
-      const res = await axios.post('api/mock/login', {
-        username: usernameRef?.current,
-        password: passwordRef?.current,
-      })
-      */
-
       if (res.status === 200) {
         const getRedirectVal = getRedirect()
         console.log('getRedirectVal:', getRedirectVal)

@@ -1,5 +1,6 @@
 import { serializeCookie } from '@/lib/cookie'
 import { getUserByMobile, comparePassword } from '@/models/user'
+import * as jwt from 'jsonwebtoken'
 
 async function oddReturn(request : Request) {
   /*
@@ -36,13 +37,15 @@ async function oddReturn(request : Request) {
   }).catch((e) => e)
   */
 
-  console.debug('The End. user.name:%s', user?.name)
+  console.debug('The End. user:', user)
 
   if (!match) {
     return Response.json({ login: false, error: 'user not found' }, { status: 401 })
   }
 
-  const cookie = serializeCookie('auth', { user: { name: user?.name } }, { path: '/' })
+  const jwtToken = jwt.sign({ user_id: user?.id }, process.env.JWT_SECRET)
+
+  const cookie = serializeCookie('auth', { jwt: jwtToken, user: { id: user?.id, name: user?.name, mobile: user?.mobile } }, { path: '/' })
   return Response.json({ login: true }, { headers: { 'Set-Cookie': cookie } })
 }
 

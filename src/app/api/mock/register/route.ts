@@ -1,6 +1,7 @@
 import { serializeCookie } from '@/lib/cookie'
 import type { User } from '@/models/user'
 import { addUser } from '@/models/user'
+import * as jwt from 'jsonwebtoken'
 
 export async function POST(request : Request) {
   const user = await request.json() as User
@@ -9,6 +10,7 @@ export async function POST(request : Request) {
     return Response.json({ login: false, error: 'user add failed' }, { status: 401 })
   }
 
-  const cookie = serializeCookie('auth', { user: { name: user?.name } }, { path: '/' })
+  const jwtToken = jwt.sign({ user_id: user?.id }, process.env.JWT_SECRET)
+  const cookie = serializeCookie('auth', { jwt: jwtToken, user: { id: user?.id, name: user?.name, mobile: user?.mobile } }, { path: '/' })
   return Response.json({ login: true }, { headers: { 'Set-Cookie': cookie } })
 }

@@ -12,7 +12,9 @@ async function seedUsers() {
         name VARCHAR(255) NOT NULL,
         mobile NUMERIC(11) NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        timestamp TIMESTAMP NOT NULL
+        create_time TIMESTAMP NOT NULL,
+        delete_time TIMESTAMP,
+        modify_time TIMESTAMP
       );
     `;
       // mobile BIGINT NOT NULL UNIQUE,
@@ -26,7 +28,7 @@ async function seedUsers() {
       users.map(async (user) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
         return sql`
-        INSERT INTO users (name, mobile, password, timestamp)
+        INSERT INTO users (name, mobile, password, create_time)
         VALUES (${user.name}, ${user.mobile}, ${hashedPassword}, now())
       `;
       }),
@@ -99,15 +101,15 @@ async function seedOrders() {
     note VARCHAR(255) NOT NULL,
     width NUMERIC(5, 1) NOT NULL,
     height NUMERIC(5, 1) NOT NULL,
-    shang_xia_gui NUMBERIC(5,1) NOT NULL,
-    shang_xia_fang NUMBERIC(5,1) NOT NULL,
-    guang_qi NUMBERIC(5,1) NOT NULL,
-    gou_qi NUMBERIC(5,1) NOT NULL,
-    bian_feng NUMBERIC(5,1) NOT NULL,
-    glass_width NUMBERIC(5,1) NOT NULL,
-    glass_height NUMBERIC(5,1) NOT NULL,
+    shang_xia_gui NUMERIC(5,1) NOT NULL,
+    shang_xia_fang NUMERIC(5,1) NOT NULL,
+    guang_qi NUMERIC(5,1) NOT NULL,
+    gou_qi NUMERIC(5,1) NOT NULL,
+    bian_feng NUMERIC(5,1) NOT NULL,
+    glass_width NUMERIC(5,1) NOT NULL,
+    glass_height NUMERIC(5,1) NOT NULL,
 
-    timestamp TIMESTAMP NOT NULL,
+    timestamp TIMESTAMP NOT NULL
   );
 `;
 
@@ -121,12 +123,19 @@ async function seedOrders() {
     // -- Alter the sequence to start from 10000
     const alterTable = await sql`ALTER SEQUENCE orders_id_seq RESTART WITH 10000;`
 
+
+
+
+    
+
+
+
     // Insert data into the "orders" table
     const insertedOrders = await Promise.all(
       orders.map(
         (order) => sql`
-        INSERT INTO orders (user_id, format_id, timestamp)
-        VALUES (${order.user_id}, ${order.format_id}, ${order.timestamp})
+        INSERT INTO orders (user_id, format_id, note, width, height, shang_xia_gui, shang_xia_fang, guang_qi, gou_qi, bian_feng, glass_width, glass_height, timestamp)
+        VALUES (${order.user_id}, ${order.format_id}, ${order.note}, ${order.width}, ${order.height}, ${order.shang_xia_gui}, ${order.shang_xia_fang}, ${order.guang_qi}, ${order.gou_qi}, ${order.bian_feng}, ${order.glass_width}, ${order.glass_height}, ${order.timestamp})
       `,
       ),
     );
@@ -146,8 +155,8 @@ async function seedOrders() {
 
 async function main() {
   await seedUsers();
-  await seedFormats();
-  await seedOrders();
+  // await seedFormats();
+  // await seedOrders();
 }
 
 main().catch((err) => {

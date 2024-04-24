@@ -2,17 +2,17 @@
 
 import { Button } from 'antd'
 
-const CalcEntry = ({ order_id }) => {
+const CalcEntry = ({ order_id } : { order_id : number}) => {
   const printTable = () => {
-    const printContents = document.getElementById('print-area').innerHTML
+    const printContents = document?.getElementById('print-area')?.innerHTML
     const originalContents = document.body.innerHTML
-    document.body.innerHTML = printContents
+    document.body.innerHTML = printContents ?? ''
     window.print()
     document.body.innerHTML = originalContents
   }
 
   const deleteOrder = () => {
-    console.log('order_id:%s', order_id)
+    console.log('order_id:', order_id)
   }
 
   return (

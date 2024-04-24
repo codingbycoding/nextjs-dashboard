@@ -1,6 +1,8 @@
 'use client'
 
-import { Alert, Button, Form, FormControl, InputGroup } from 'react-bootstrap'
+import {
+  Alert, Button, Form, FormControl, InputGroup,
+} from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { faUser, faLock, faPhone } from '@fortawesome/free-solid-svg-icons'
@@ -62,6 +64,7 @@ export default function Register() {
     <>
       <Alert variant="danger" show={error !== ''} onClose={() => setError('')} dismissible>{error}</Alert>
       <Form onSubmit={register}>
+        {/*
         <InputGroup className="mb-3">
           <InputGroupText><FontAwesomeIcon icon={faUser} fixedWidth /></InputGroupText>
           <FormControl
@@ -76,6 +79,7 @@ export default function Register() {
             })}
           />
         </InputGroup>
+        */}
 
         <InputGroup className="mb-3">
           <InputGroupText>

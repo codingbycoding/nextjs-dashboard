@@ -1,13 +1,7 @@
 import sql from '@/lib/db'
 
 import bcrypt from 'bcrypt'
-
-export interface User {
-  id: number;
-  name: string;
-  mobile: string;
-  password: string;
-}
+import { User } from '@/models/models'
 
 export async function getUserByName(name: string) {
   try {
@@ -38,16 +32,22 @@ export async function getUserByMobile(mobile: string) : Promise<User | undefined
   }
 }
 
-export async function addUser(user: User) : Promise<boolean> {
+export async function addUser(inUser: User) : Promise<boolean> {
+  const user = inUser
+  if (user.name === undefined || user.name === '') {
+    user.name = '3660'
+  }
+
   const oldUser = await getUserByMobile(user.mobile)
   if (oldUser?.mobile === user.mobile) {
+    console.error('user with mobile exist:', user.mobile)
     return false
   }
 
   const hashedPassword = await bcrypt.hash(user.password, 10)
   await sql`
-        INSERT INTO users (name, mobile, password)
-        VALUES (${user.name}, ${user.mobile}, ${hashedPassword})
+        INSERT INTO users (name, mobile, password, create_time)
+        VALUES (${user.name}, ${user.mobile}, ${hashedPassword}, now())
         ON CONFLICT (mobile) DO NOTHING;
       `
   return true

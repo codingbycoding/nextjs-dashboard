@@ -1,22 +1,37 @@
 'use client'
 
 import { Button } from 'antd'
+import { Order } from '@/models/models'
 
-const CalcEntryVar = ({ order }) => {
+const CalcEntryVar = ({ order } : { order: Order }) => {
   const printTable = () => {
-    const printContents = document.getElementById('print-area').innerHTML
+    const printContents = document?.getElementById('print-area')?.innerHTML
     const originalContents = document.body.innerHTML
-    document.body.innerHTML = printContents
+    document.body.innerHTML = printContents ?? ''
+
     window.print()
     document.body.innerHTML = originalContents
   }
 
   const deleteOrder = () => {
-    console.log('order_id:%s', order.id)
+    console.log('order_id:', order.id)
+  }
+
+  const formatDateTime = (date : Date) : string => {
+    const formattedDate = date.toString().slice(0, 19).replace('T', ' ')
+    return formattedDate
+  }
+
+  const truncIfDotZero = (num : number) : number => {
+    const str = num?.toString() ?? ''
+    if (str.endsWith('.0')) {
+      return parseInt(str, 10)
+    }
+    return num
   }
 
   return (
-    <div id="print-area" className="parent">
+    <div id={`print-area-${order.id}`} className="parent">
       <table className="calc-entry">
         <thead>
           <tr>
@@ -36,18 +51,18 @@ const CalcEntryVar = ({ order }) => {
         </thead>
         <tbody>
           <tr>
-            <td>{ order.timestamp }</td>
+            <td>{ formatDateTime(order.timestamp) }</td>
             <td>{ order.note }</td>
-            <td>{ order.format_id }</td>
-            <td>{ order.width }</td>
-            <td>{ order.height }</td>
-            <td>{ order.guang_qi }</td>
-            <td>{ order.gou_qi }</td>
-            <td>{ order.shang_xia_fang }</td>
-            <td>{ order.bian_feng }</td>
-            <td>{ order.shang_xia_gui }</td>
-            <td>{ order.glass_width }</td>
-            <td>{ order.glass_height }</td>
+            <td>{ order.formatID }</td>
+            <td>{ truncIfDotZero(order.width) }</td>
+            <td>{ truncIfDotZero(order.height) }</td>
+            <td>{ truncIfDotZero(order.guangQi) }</td>
+            <td>{ truncIfDotZero(order.gouQi) }</td>
+            <td>{ truncIfDotZero(order.shangXiaFang) }</td>
+            <td>{ truncIfDotZero(order.bianFeng) }</td>
+            <td>{ truncIfDotZero(order.shangXiaGui) }</td>
+            <td>{ truncIfDotZero(order.glassWidth) }</td>
+            <td>{ truncIfDotZero(order.glassHeight) }</td>
           </tr>
         </tbody>
       </table>
