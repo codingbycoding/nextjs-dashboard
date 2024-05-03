@@ -1,10 +1,16 @@
-.container-zero-margin {
+div.container-zero-margin {
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 output {
     display: block;
+}
+
+.container-lg {
+    width: 100%;
+    max-width: 100%;
 }
 
 /*
@@ -16,9 +22,16 @@ output {
 */
 
 .parent {
-display: flex; /* Make the parent a flex container */
-  justify-content: center; /* Center the buttons horizontally */
-  align-items: center; /* Center the buttons vertically (optional) */
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+}
+
+div.parent:hover {
+    background-color: #f0f0f0;
+    color: #333;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
 }
 
 table {
@@ -26,14 +39,31 @@ table {
     width: 100%;
 }
 
-/*
+#add-order {
+    display: block;
+}
+
 .calc-entry th,
 .calc-entry td {
-    min-width: 80px;
+    // min-width: 70px;
+    width: 70px;
     white-space: nowrap;
-    padding: 0px 5px;
+    padding: 0px 2px;
 }
-*/
+
+table.calc-entry tr td:nth-child(1) {
+    width: 170px;
+}
+
+table.calc-entry tr td:nth-child(2) {
+    width: 180px;
+    max-width: 180px;
+}
+
+table.calc-entry tr td:nth-child(3) {
+    width: 220px;
+    max-width: 220px;
+}
 
 .calcEntry {
     display: auto;
@@ -44,13 +74,31 @@ table {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    text-align: left; /* Align text to the left */
+    text-align: left; 
 }
 
+div.parent:hover .calc-entry td  {
+    overflow: visible;
+    white-space: normal;
+    text-overflow: initial;
+}
+
+/*
 .calc-entry td:hover {
     overflow: visible;
     white-space: normal;
     text-overflow: initial;
+  }
+*/
+
+  div.parent-div-for-orders > div:nth-child(odd) {
+      // background-color: azure;
+      // background-color: CornflowerBlue;
+     background-color: LightSkyBlue;
+  }
+
+  div.parent-div-for-orders > div:nth-child(even) {
+      background-color: white;
   }
 
 @media print {

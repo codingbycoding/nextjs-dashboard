@@ -18,7 +18,7 @@ export async function getUserByName(name: string) {
   }
 }
 
-export async function getUserByMobile(mobile: string) : Promise<User | undefined> {
+export async function getUserByMobile(mobile: number) : Promise<User | undefined> {
   try {
     const users = await sql`SELECT * from users WHERE mobile = ${mobile}`
     if (Array.isArray(users) && users.length === 1) {

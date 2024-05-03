@@ -2,7 +2,7 @@
 
 import { Divider } from 'antd'
 
-import CalcEntry from './CalcEntry'
+// import CalcEntry from './CalcEntry'
 import CalcComp from './calcComp'
 import CalcEntryByDB from './CalcEntryByDB'
 
@@ -14,11 +14,12 @@ export default function Page() {
     >
       <CalcComp idd={1} />
 
+      {/*
       <Divider dashed />
       <Divider dashed />
       <CalcEntry order_id={20240405001} />
+      */}
 
-      <Divider dashed />
       <Divider dashed />
       <CalcEntryByDB userID={1} />
     </div>

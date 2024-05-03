@@ -2,6 +2,7 @@
 
 import { Button } from 'antd'
 import { Order } from '@/models/models'
+import axios from 'axios'
 
 const CalcEntryVar = ({ order } : { order: Order }) => {
   const printTable = () => {
@@ -13,12 +14,29 @@ const CalcEntryVar = ({ order } : { order: Order }) => {
     document.body.innerHTML = originalContents
   }
 
-  const deleteOrder = () => {
+  const deleteOrder = async () => {
     console.log('order_id:', order.id)
+    try {
+      const res = await axios.delete(`api/mock/orders/${order.id}`)
+      if (res.status === 200) {
+        console.log('status:', 200)
+      }
+
+      // eslint-disable-next-line no-restricted-globals
+      location.reload()
+    } catch (err) {
+      if (err instanceof Error) {
+        // setError(err.message)
+        console.log('err:', err)
+      }
+    } finally {
+      // setSubmitting(false)
+      console.log('finally:')
+    }
   }
 
-  const formatDateTime = (date : Date) : string => {
-    const formattedDate = date.toString().slice(0, 19).replace('T', ' ')
+  const formatDateTime = (date : Date | undefined) : string => {
+    const formattedDate = date ? date.toString().slice(0, 19).replace('T', ' ') : ''
     return formattedDate
   }
 
@@ -41,7 +59,7 @@ const CalcEntryVar = ({ order } : { order: Order }) => {
             <th>宽</th>
             <th>高</th>
             <th>光企(2支)</th>
-            <th>勾企(2支)</th>
+            <th>{ truncIfDotZero(order.gouQi) === 0 ? '' : '勾企(2支)' }</th>
             <th>上下方(4支)</th>
             <th>边封</th>
             <th>上下轨</th>
@@ -51,13 +69,15 @@ const CalcEntryVar = ({ order } : { order: Order }) => {
         </thead>
         <tbody>
           <tr>
-            <td>{ formatDateTime(order.timestamp) }</td>
+            <td>{ formatDateTime(order.createTime) }</td>
             <td>{ order.note }</td>
-            <td>{ order.formatID }</td>
+            <td>{ order.formatName }</td>
             <td>{ truncIfDotZero(order.width) }</td>
             <td>{ truncIfDotZero(order.height) }</td>
             <td>{ truncIfDotZero(order.guangQi) }</td>
-            <td>{ truncIfDotZero(order.gouQi) }</td>
+
+            <td>{ truncIfDotZero(order.gouQi) === 0 ? '' : truncIfDotZero(order.gouQi) }</td>
+
             <td>{ truncIfDotZero(order.shangXiaFang) }</td>
             <td>{ truncIfDotZero(order.bianFeng) }</td>
             <td>{ truncIfDotZero(order.shangXiaGui) }</td>

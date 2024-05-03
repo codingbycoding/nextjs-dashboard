@@ -5,7 +5,7 @@
   "scripts": {
     "seed": "node -r dotenv/config ./scripts/seed.js",
     "seed.postgres": "node -r dotenv/config ./scripts/seed.postgres.mjs",
-    "seed.schemas": "node -r dotenv/config ./scripts/seed.schemas.mjs",
+    "seed.schemas": "ts-node -r dotenv/config ./scripts/seed.schemas.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -41,9 +41,11 @@
     "react-hook-form": "^7.49.2",
     "react-paginate": "^8.2.0",
     "react-redux": "^9.0.4",
-    "swr": "^2.2.4"
+    "swr": "^2.2.4",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/cookie": "^0.6.0",
     "@types/node": "^20.10.6",
     "@types/nprogress": "^0.2.3",
@@ -62,8 +64,8 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "json-server": "^0.17.4",
+    "jsonwebtoken": "^9.0.2",
     "sass": "^1.69.6",
-    "typescript": "^5.3.3",
-    "jsonwebtoken": "^9.0.2"
+    "typescript": "^5.3.3"
   }
 }

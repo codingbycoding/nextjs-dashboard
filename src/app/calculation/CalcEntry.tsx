@@ -2,7 +2,7 @@
 
 import { Button } from 'antd'
 
-const CalcEntry = ({ order_id } : { order_id : number}) => {
+const CalcEntry = ({ order_id } : { order_id : number }) => {
   const printTable = () => {
     const printContents = document?.getElementById('print-area')?.innerHTML
     const originalContents = document.body.innerHTML

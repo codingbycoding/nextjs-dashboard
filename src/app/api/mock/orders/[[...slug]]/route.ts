@@ -1,8 +1,25 @@
 import { NextRequest } from 'next/server'
 import * as jwt from 'jsonwebtoken'
 
-import { getOrders, addOrder } from '@/models/order'
+import { getOrders, addOrder, deleteOrder } from '@/models/order'
 import { User, Order } from '@/models/models'
+
+function decodeUserID(request : NextRequest) : number {
+  const authStr = request.cookies.get('auth')?.value
+  if (authStr === undefined) {
+    return 0
+  }
+
+  const jsonStr = authStr.startsWith('j:') ? JSON.parse(authStr.slice(2)) : authStr
+
+  const user = jsonStr.user as User
+
+  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET)
+  const userID = jwtDecoded?.user_id
+
+  console.debug('user:', user)
+  return userID
+}
 
 export async function GET(request : NextRequest) {
   const authStr = request.cookies.get('auth')?.value
@@ -49,5 +66,15 @@ export async function POST(request : NextRequest) {
 
   order.userID = userID
   const result = await addOrder(order)
+  return Response.json({ result })
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: { slug: string } }) {
+  console.log('delete')
+
+  const userID = decodeUserID(request)
+  const orderID = parseInt(params.slug, 10)
+
+  const result = await deleteOrder(userID, orderID)
   return Response.json({ result })
 }

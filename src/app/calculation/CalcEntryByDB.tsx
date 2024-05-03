@@ -26,7 +26,7 @@ const CalcEntryByDB = ({ userID } : { userID: number }) => {
   }, [userID]) // Depend on userID to refetch when it changes
 
   return (
-    <div>
+    <div className="parent-div-for-orders">
       {dbOrders.map((order : Order) => (
         <CalcEntryVar key={order.id} order={order} />
       ))}

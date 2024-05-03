@@ -5,7 +5,7 @@ import { Button } from 'antd'
 import axios from 'axios'
 import { Order } from '@/models/models'
 
-interface Option {
+type Option = {
   value: string;
   label: string;
 }
@@ -23,6 +23,7 @@ export default function CalcComp({ idd }:{ idd:number }) {
   const [height, setHeight] = useState<string>('')
   const [widthError, setWidthError] = useState<string>('')
   const [heightError, setHeightError] = useState<string>('')
+  const [confirmError, setConfirmError] = useState<string>('')
 
   const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value)
@@ -32,25 +33,25 @@ export default function CalcComp({ idd }:{ idd:number }) {
 
   const handleWidthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
-    setWidth(value)
     if (value && Number.isNaN(parseFloat(value))) {
       setWidthError('请输入有效的数字')
     } else {
       setWidthError('')
+      setWidth(value)
     }
   }
 
   const handleHeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
-    setHeight(value)
     if (value && Number.isNaN(parseFloat(value))) {
       setHeightError('请输入有效的数字')
     } else {
       setHeightError('')
+      setHeight(value)
     }
   }
 
-  const calculateOutputA = (lwidth: string, lheight: string) : Order => {
+  const calculateOutputA = (formatName: string, lwidth: string, lheight: string) : Order => {
     const widthVal = parseFloat(lwidth)
     const heightVal = parseFloat(lheight)
 
@@ -63,6 +64,7 @@ export default function CalcComp({ idd }:{ idd:number }) {
     const glassHeightVal = guangQiVal - 148
 
     return {
+      formatName,
       guangQi: guangQiVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: gouQiVal,
@@ -73,7 +75,7 @@ export default function CalcComp({ idd }:{ idd:number }) {
     } as Order
   }
 
-  const calculateOutputB = (lwidth: string, lheight: string) : Order => {
+  const calculateOutputB = (formatName: string, lwidth: string, lheight: string) : Order => {
     const widthVal = parseFloat(lwidth)
     const heightVal = parseFloat(lheight)
 
@@ -85,6 +87,7 @@ export default function CalcComp({ idd }:{ idd:number }) {
     const glassHeightVal = guangQiVal - 18
 
     return {
+      formatName,
       guangQi: guangQiVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: 0,
@@ -95,7 +98,7 @@ export default function CalcComp({ idd }:{ idd:number }) {
     } as Order
   }
 
-  const calculateOutputC = (inWidth: string, inHeight: string):Order => {
+  const calculateOutputC = (formatName: string, inWidth: string, inHeight: string):Order => {
     const widthVal = parseFloat(inWidth)
     const heightVal = parseFloat(inHeight)
 
@@ -108,6 +111,7 @@ export default function CalcComp({ idd }:{ idd:number }) {
     const glassHeightVal = guangQiVal - 18
 
     return {
+      formatName,
       guangQi: guangQiVal,
       shangXiaFang: shangXiaFangVal,
       gouQi: gouQiVal,
@@ -125,6 +129,7 @@ export default function CalcComp({ idd }:{ idd:number }) {
   }
 
   const formatOutput = (lval: Order) : Order => ({
+    formatName: lval.formatName,
     guangQi: formatValue(lval?.guangQi ?? 0, 1),
     shangXiaFang: formatValue(lval.shangXiaFang, 1),
     gouQi: formatValue(lval.gouQi, 1),
@@ -138,7 +143,6 @@ export default function CalcComp({ idd }:{ idd:number }) {
     width: parseFloat(width),
     height: parseFloat(height),
     userID: 0,
-    timestamp: new Date(),
   })
 
   const calculateOutputs = () : Order => {
@@ -153,22 +157,22 @@ export default function CalcComp({ idd }:{ idd:number }) {
       id: 0,
       userID: 0,
       formatID: 0,
+      formatName: '',
       note,
       width: parseFloat(width),
       height: parseFloat(height),
-      timestamp: new Date(),
     }
 
     if (widthError || heightError) return outputVal
     switch (selectedOption) {
       case 'a':
-        outputVal = calculateOutputA(width, height)
+        outputVal = calculateOutputA(options[0].label, width, height)
         break
       case 'b':
-        outputVal = calculateOutputB(width, height)
+        outputVal = calculateOutputB(options[1].label, width, height)
         break
       case 'c':
-        outputVal = calculateOutputC(width, height)
+        outputVal = calculateOutputC(options[2].label, width, height)
         break
       default:
     }
@@ -179,13 +183,25 @@ export default function CalcComp({ idd }:{ idd:number }) {
 
   const order = calculateOutputs()
 
+  const refresh = () => {
+    // eslint-disable-next-line no-restricted-globals
+    location.reload()
+  }
+
   const handleAddOrder = async () => {
     console.log('outputs order:', order)
+    if (Number.isNaN(width) || Number.isNaN(height) || note === '') {
+      console.error('error width and heigth should be numbers')
+      setConfirmError('请检查所有输入')
+      return
+    }
+
     try {
       const res = await axios.post('api/mock/orders', order)
       if (res.status === 200) {
         console.log('200')
       }
+      refresh()
     } catch (err) {
       if (err instanceof Error) {
         // setError(err.message)
@@ -319,7 +335,8 @@ export default function CalcComp({ idd }:{ idd:number }) {
       </div>
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
-        <Button type="primary" onClick={handleAddOrder}>确认</Button>
+        <Button id="add-order" type="primary" onClick={handleAddOrder}>确认</Button>
+        {confirmError && <span style={{ color: 'red' }}>{confirmError}</span>}
       </div>
 
     </div>

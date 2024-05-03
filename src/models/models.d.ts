@@ -1,14 +1,25 @@
 export type User = {
-  id: number;
+  id?: number;
   name: string;
-  mobile: string;
+  mobile: number;
   password: string;
+  createTime?: Date;
+  deleteTime?: Date;
+}
+
+export type Format = {
+  id?: number;
+  userID: number;
+  name: string;
+  createTime?: Date;
+  deleteTime?: Date;
 }
 
 export type Order = {
-  id: number;
+  id?: number;
   userID: number;
   formatID: number;
+  formatName: string;
   note: string;
   width: number;
   height: number;
@@ -19,5 +30,6 @@ export type Order = {
   bianFeng: number;
   glassWidth: number;
   glassHeight: number;
-  timestamp: Date;
+  createTime?: Date;
+  deleteTime?: Date;
 }
