@@ -20,6 +20,7 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
       bianFeng: row.bian_feng,
       glassWidth: row.glass_width,
       glassHeight: row.glass_height,
+      equation: row.equation,
       createTime: row.create_time,
       deleteTime: row.delete_time,
     }))
@@ -32,8 +33,8 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
 
 export async function addOrder(order: Order) : Promise<boolean> {
   await sql`
-        INSERT INTO orders (user_id, format_id, format_name, note, width, height, shang_xia_gui, shang_xia_fang, guang_qi, gou_qi, bian_feng, glass_width, glass_height, create_time)
-        VALUES (${order.userID}, ${order.formatID}, ${order.formatName}, ${order.note}, ${order.width}, ${order.height}, ${order.shangXiaGui}, ${order.shangXiaFang}, ${order.guangQi}, ${order.gouQi}, ${order.bianFeng}, ${order.glassWidth}, ${order.glassHeight}, now());
+        INSERT INTO orders (user_id, format_id, format_name, note, width, height, shang_xia_gui, shang_xia_fang, guang_qi, gou_qi, bian_feng, glass_width, glass_height, equation, create_time)
+        VALUES (${order.userID}, ${order.formatID}, ${order.formatName}, ${order.note}, ${order.width}, ${order.height}, ${order.shangXiaGui}, ${order.shangXiaFang}, ${order.guangQi}, ${order.gouQi}, ${order.bianFeng}, ${order.glassWidth}, ${order.glassHeight},${order.equation}, now());
       `
   return true
 }

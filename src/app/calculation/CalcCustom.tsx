@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Button } from 'antd'
 import axios from 'axios'
+
 import { Format, Order } from '@/models/models'
 
 type Option = {
@@ -17,7 +18,7 @@ const options = [
 ]
 
 const glassOptions: Option[] = [
-  { value: 'a', label: '白波' },
+  { value: 'a', label: '白玻' },
   { value: 'b', label: '磨砂' },
   { value: 'c', label: '长虹' },
 ]
@@ -51,8 +52,6 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     setGlassFSelectedOption(event.target.value)
   }
 
-  const numberOrEmpty = (val: number) : string => (Number.isNaN(val) ? '' : val.toString())
-
   const handleWidthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     if (value && Number.isNaN(parseFloat(value))) {
@@ -71,57 +70,17 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
       setHeightError('')
       set高(value)
     }
+
+    /*
+    if (value !== '' && 宽 !== '') {
+
+    }
+    */
   }
 
-  const calculateOutputA = (formatName: string, lwidth: string, lheight: string) : Order => {
-    const widthVal = parseFloat(lwidth)
-    const heightVal = parseFloat(lheight)
-
-    const guangQiVal = heightVal - 53
-    const shangXiaFangVal = (widthVal - 35 + 85) / 2
-    const gouQiVal = guangQiVal - 17
-    const bianFengVal = heightVal
-    const shangXiaGuiVal = widthVal - 56
-    const glassWidthVal = shangXiaFangVal - 148
-    const glassHeightVal = guangQiVal - 148
-
-    return {
-      formatName,
-      guangQi: guangQiVal,
-      shangXiaFang: shangXiaFangVal,
-      gouQi: gouQiVal,
-      bianFeng: bianFengVal,
-      shangXiaGui: shangXiaGuiVal,
-      glassWidth: glassWidthVal,
-      glassHeight: glassHeightVal,
-    } as Order
-  }
-
-  const formatValue = (value: number, decimalPlaces: number): number => {
-    const isInteger = Number.isInteger(value)
-    const formattedValue = isInteger ? value.toFixed(0) : value.toFixed(decimalPlaces)
-    return Number.parseFloat(formattedValue)
-  }
-
-  const formatOutput = (lval: Order) : Order => ({
-    formatName: lval.formatName,
-    guangQi: formatValue(lval?.guangQi ?? 0, 1),
-    shangXiaFang: formatValue(lval.shangXiaFang, 1),
-    gouQi: formatValue(lval.gouQi, 1),
-    bianFeng: formatValue(lval.bianFeng, 1),
-    shangXiaGui: formatValue(lval.shangXiaGui, 1),
-    glassWidth: formatValue(lval.glassWidth, 1),
-    glassHeight: formatValue(lval.glassHeight, 1),
-    id: 0,
-    note,
-    formatID: 0,
-    width: parseFloat(宽),
-    height: parseFloat(高),
-    userID: 0,
-  })
-
-  const calculateOutputs = () : Order => {
-    let outputVal: Order = {
+  const calcOrder = () => {
+    const order = {
+      formatName: selectedFormationX?.name ?? '',
       guangQi: 0,
       shangXiaFang: 0,
       gouQi: 0,
@@ -130,27 +89,36 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
       glassWidth: 0,
       glassHeight: 0,
       id: 0,
-      userID: 0,
-      formatID: 0,
-      formatName: '',
       note,
+      formatID: 0,
       width: parseFloat(宽),
       height: parseFloat(高),
+      equation: { 宽, 高 },
+      userID: 0,
+    } as unknown as Order
+
+    if (selectedFormationX === undefined || selectedFormationX?.equation === undefined) {
+      return order
     }
 
-    if (widthError || heightError) return outputVal
-    switch (selectedOption) {
-      case 'a':
-        outputVal = calculateOutputA(options[0].label, 宽, 高)
-        break
-      default:
-    }
+    // Use reduce instead of map to avoid creating a new object in each iteration
+    const updatedOrder = Object.entries(selectedFormationX.equation).reduce(
+      (acc, [key, value]) => {
+        const val = (new Function('宽', '高', `return ${value}`))(宽, 高)
+        return { ...acc, equation: { ...acc.equation, [key]: val } }
+      },
+      order,
+    )
 
-    // setOrder(outputVal)
-    return formatOutput(outputVal)
+    console.log('order:', updatedOrder)
+    return updatedOrder
   }
 
-  const order = calculateOutputs()
+  const formatValue = (value: number, decimalPlaces: number): number => {
+    const isInteger = Number.isInteger(value)
+    const formattedValue = isInteger ? value.toFixed(0) : value.toFixed(decimalPlaces)
+    return Number.parseFloat(formattedValue)
+  }
 
   const refresh = () => {
     // eslint-disable-next-line no-restricted-globals
@@ -194,12 +162,16 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
   }, [userID]) // Depend on userID to refetch when it changes
 
   const handleAddOrder = async () => {
-    console.log('outputs order:', order)
-    if (Number.isNaN(width) || Number.isNaN(height) || note === '') {
-      console.error('error width and heigth should be numbers')
+    if (isNaN(宽) || isNaN(高) || note === '') {
+      console.error('error 宽 and 高 should be numbers')
       setConfirmError('请检查所有输入')
       return
     }
+
+    const order = calcOrder()
+    order.equation = JSON.stringify(order.equation)
+
+    console.log('outputs order:', order)
 
     try {
       const res = await axios.post('api/mock/orders', order)
@@ -222,7 +194,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     <div
       id={`calcComp-${idd}`}
       style={{
-        display: 'flex', flexWrap: 'nowrap', height: '60px', margin: 0, padding: 0,
+        display: 'flex', flexWrap: 'nowrap', height: '60px', margin: 0, padding: 0, alignItems: 'left',
       }}
     >
       <div
@@ -246,8 +218,13 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         </select>
       </div>
 
-      <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
-        <label htmlFor={`glass-dropdown-${idd}`}>正面玻璃:</label>
+      <div
+        className="column"
+        style={{
+          flex: 1, padding: 5, minWidth: '92px', boxSizing: 'border-box',
+        }}
+      >
+        <label htmlFor={`glass-dropdown-${idd}`} style={{ display: 'block' }}>正面玻璃</label>
         <select id={`glass-dropdown-${idd}`} style={{ minHeight: 24 }} value={glassSelectedOption} onChange={handleGlassOptionChange}>
           {glassOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -257,8 +234,13 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         </select>
       </div>
 
-      <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
-        <label htmlFor={`glass-f-dropdown-${idd}`}>背面玻璃:</label>
+      <div
+        className="column"
+        style={{
+          flex: 1, padding: 5, minWidth: '92px', boxSizing: 'border-box',
+        }}
+      >
+        <label htmlFor={`glass-f-dropdown-${idd}`} style={{ display: 'block' }}>背面玻璃</label>
         <select id={`glass-f-dropdown-${idd}`} style={{ minHeight: 24 }} value={glassFSelectedOption} onChange={handleGlassFOptionChange}>
           {glassOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -298,14 +280,13 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
             style={{
               flex: 1,
               padding: 5,
-              minWidth: 120,
+              minWidth: 70,
               maxWidth: 150,
               boxSizing: 'border-box',
             }}
           >
             <label htmlFor={key}>{key}</label>
             <output id={key}>{高 !== '' && 宽 !== '' && (new Function('宽', '高', `return ${value}`))(宽, 高)}</output>
-
           </div>
         ))
       ) : (

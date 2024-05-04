@@ -1,17 +1,20 @@
 import {
-  faAddressCard, faBell, faFileLines, faStar,
+  faAddressCard, /* faBell */ faFileLines, faStar,
 } from '@fortawesome/free-regular-svg-icons'
+
 import {
   faBug,
+  /*
   faCalculator,
   faChartPie,
-  faCode,
   faDroplet,
-  faGauge,
   faLayerGroup,
   faLocationArrow,
   faPencil,
   faPuzzlePiece,
+  */
+  faCode,
+  faGauge,
   faRightToBracket,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { PropsWithChildren } from 'react'
@@ -31,17 +34,23 @@ export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
       <SidebarNavItem icon={faCode} href="/calculation">
-        计算
+        下料
+        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+      </SidebarNavItem>
+      <SidebarNavItem icon={faCode} href="/formats">
+        样式
         <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
       </SidebarNavItem>
       <SidebarNavItem icon={faGauge} href="/">
         仪表盘
         <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
       </SidebarNavItem>
+      {/*
       <SidebarNavItem icon={faCode} href="/pokemons">
         样例
         <small className="ms-auto"><Badge bg="danger" className="ms-auto">DEMO</Badge></small>
       </SidebarNavItem>
+      */}
 
       <SidebarNavTitle>Extras</SidebarNavTitle>
 

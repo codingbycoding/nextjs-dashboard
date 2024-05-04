@@ -5,7 +5,9 @@ import axios from 'axios'
 
 import { Order } from '@/models/models'
 
-const CalcEntryVar = ({ order } : { order: Order }) => {
+const CalcCustomEntryVar = ({ order } : { order: Order }) => {
+  const equation = JSON.parse(order.equation ?? '')
+
   const printTable = (e: { preventDefault: () => void }) => {
     e.preventDefault()
     console.log('printTable order_id:', order.id)
@@ -58,34 +60,29 @@ const CalcEntryVar = ({ order } : { order: Order }) => {
           <tr>
             <th>日期</th>
             <th>备注</th>
-            <th>类型</th>
-            <th>宽</th>
-            <th>高</th>
-            <th>光企(2支)</th>
-            <th>{ truncIfDotZero(order.gouQi ?? 0) === 0 ? '' : '勾企(2支)' }</th>
-            <th>上下方(4支)</th>
-            <th>边封</th>
-            <th>上下轨</th>
-            <th>玻璃宽度</th>
-            <th>玻璃高度</th>
+            {order.equation
+    && Object.entries(equation).map(([key]) => (
+      <th key={key}>
+        {' '}
+        {key}
+        {' '}
+      </th>
+    ))}
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{ formatDateTime(order.createTime) }</td>
             <td>{ order.note }</td>
-            <td>{ order.formatName }</td>
-            <td>{ truncIfDotZero(order.width ?? 0) }</td>
-            <td>{ truncIfDotZero(order.height ?? 0) }</td>
-            <td>{ truncIfDotZero(order.guangQi ?? 0) }</td>
+            {order.equation
+    && Object.entries(equation).map(([key, value]) => (
+      <th key={key}>
+        {' '}
+        {value}
+        {' '}
+      </th>
+    ))}
 
-            <td>{ truncIfDotZero(order.gouQi ?? 0) === 0 ? '' : truncIfDotZero(order.gouQi ?? 0) }</td>
-
-            <td>{ truncIfDotZero(order.shangXiaFang ?? 0) }</td>
-            <td>{ truncIfDotZero(order.bianFeng ?? 0) }</td>
-            <td>{ truncIfDotZero(order.shangXiaGui ?? 0) }</td>
-            <td>{ truncIfDotZero(order.glassWidth ?? 0) }</td>
-            <td>{ truncIfDotZero(order.glassHeight ?? 0) }</td>
           </tr>
         </tbody>
       </table>
@@ -99,4 +96,4 @@ const CalcEntryVar = ({ order } : { order: Order }) => {
   )
 }
 
-export default CalcEntryVar
+export default CalcCustomEntryVar

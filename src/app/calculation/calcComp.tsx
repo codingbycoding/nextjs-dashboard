@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Button } from 'antd'
 import axios from 'axios'
+
 import { Order } from '@/models/models'
 
 type Option = {
@@ -137,12 +138,12 @@ export default function CalcComp({ idd }:{ idd:number }) {
   const formatOutput = (lval: Order) : Order => ({
     formatName: lval.formatName,
     guangQi: formatValue(lval?.guangQi ?? 0, 1),
-    shangXiaFang: formatValue(lval.shangXiaFang, 1),
-    gouQi: formatValue(lval.gouQi, 1),
-    bianFeng: formatValue(lval.bianFeng, 1),
-    shangXiaGui: formatValue(lval.shangXiaGui, 1),
-    glassWidth: formatValue(lval.glassWidth, 1),
-    glassHeight: formatValue(lval.glassHeight, 1),
+    shangXiaFang: formatValue(lval.shangXiaFang ?? 0, 1),
+    gouQi: formatValue(lval.gouQi ?? 0, 1),
+    bianFeng: formatValue(lval.bianFeng ?? 0, 1),
+    shangXiaGui: formatValue(lval.shangXiaGui ?? 0, 1),
+    glassWidth: formatValue(lval.glassWidth ?? 0, 1),
+    glassHeight: formatValue(lval.glassHeight ?? 0, 1),
     id: 0,
     note,
     formatID: 0,
