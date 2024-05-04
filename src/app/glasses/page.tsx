@@ -3,9 +3,8 @@
 import { Divider } from 'antd'
 
 // import CalcEntry from './CalcEntry'
-import CalcComp from './CalcComp'
+import CalcComp from './calcComp'
 import CalcEntryByDB from './CalcEntryByDB'
-import CalcCustom from './CalcCustom'
 
 export default function Page() {
   return (
@@ -14,9 +13,6 @@ export default function Page() {
     }}
     >
       <CalcComp idd={1} />
-      <Divider dashed />
-      <Divider dashed />
-      <CalcCustom idd={2} userID={1}/>
 
       {/*
       <Divider dashed />

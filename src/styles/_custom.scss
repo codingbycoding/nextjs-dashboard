@@ -8,6 +8,25 @@ output {
     display: block;
 }
 
+.format-left-w {
+    min-width: 200px;
+    max-width: 200px;
+    width: 200px;
+}
+
+.format-equal-w {
+    min-width: 60px;
+    max-width: 60px;
+    width: 60px;
+    text-align: center;
+}
+
+.format-right-w {
+    min-width: 280px;
+    max-width: 280px;
+    width: 280px;
+}
+
 .container-lg {
     width: 100%;
     max-width: 100%;
@@ -47,20 +66,24 @@ table {
 .calc-entry td {
     // min-width: 70px;
     width: 70px;
+    // max-width: 110;
     white-space: nowrap;
     padding: 0px 2px;
 }
 
 table.calc-entry tr td:nth-child(1) {
     width: 170px;
+    max-width: 170px;
 }
 
 table.calc-entry tr td:nth-child(2) {
+    min-width: 180px;
     width: 180px;
     max-width: 180px;
 }
 
 table.calc-entry tr td:nth-child(3) {
+    min-width: 220px;
     width: 220px;
     max-width: 220px;
 }
@@ -75,6 +98,15 @@ table.calc-entry tr td:nth-child(3) {
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: left; 
+}
+
+div.parent-of-confirm {
+    display: flex;
+}
+
+div.column-plus-circle {
+    width: 200px;
+    max-width: 500px;
 }
 
 div.parent:hover .calc-entry td  {
@@ -98,6 +130,14 @@ div.parent:hover .calc-entry td  {
   }
 
   div.parent-div-for-orders > div:nth-child(even) {
+      background-color: white;
+  }
+
+  div.parent-div-for-formats > div:nth-child(odd) {
+     background-color: LightSkyBlue;
+  }
+
+  div.parent-div-for-formats > div:nth-child(even) {
       background-color: white;
   }
 

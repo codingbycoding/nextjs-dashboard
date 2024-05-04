@@ -16,12 +16,6 @@ const options: Option[] = [
   { value: 'c', label: '极窄三联动1635(不锈钢下轨)' },
 ]
 
-const glassOptions: Option[] = [
-  { value: 'a', label: '白波' },
-  { value: 'b', label: '磨砂' },
-  { value: 'c', label: '长虹' },
-]
-
 export default function CalcComp({ idd }:{ idd:number }) {
   const [selectedOption, setSelectedOption] = useState<string>('a')
   const [note, setNote] = useState<string>('')
@@ -248,20 +242,9 @@ export default function CalcComp({ idd }:{ idd:number }) {
       </div>
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
-        <label htmlFor={`glass-dropdown-${idd}`}>正面玻璃:</label>
-        <select id={`glass-dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedOption} onChange={handleOptionChange}>
-          {glassOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
-        <label htmlFor={`glass-f-dropdown-${idd}`}>背面玻璃:</label>
-        <select id={`glass-f-dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedOption} onChange={handleOptionChange}>
-          {glassOptions.map((option) => (
+        <label htmlFor={`dropdown-${idd}`}>背面玻璃:</label>
+        <select id={`dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedOption} onChange={handleOptionChange}>
+          {glass_options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -370,3 +353,11 @@ export default function CalcComp({ idd }:{ idd:number }) {
     </div>
   )
 }
+
+/*
+          <Button variant="success" onClick={() => router.push('/pokemons/create')}>
+            <FontAwesomeIcon icon={faPlus} fixedWidth />
+            Add new
+          </Button>
+
+*/

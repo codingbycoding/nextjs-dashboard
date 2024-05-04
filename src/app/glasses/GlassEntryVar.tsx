@@ -4,7 +4,7 @@ import { Button } from 'antd'
 import { Order } from '@/models/models'
 import axios from 'axios'
 
-const CalcEntryVar = ({ order } : { order: Order }) => {
+const GlassEntryVar = ({ order } : { order: Order }) => {
   const printTable = (e: { preventDefault: () => void }) => {
     e.preventDefault()
     console.log('printTable order_id:', order.id)
@@ -98,4 +98,4 @@ const CalcEntryVar = ({ order } : { order: Order }) => {
   )
 }
 
-export default CalcEntryVar
+export default GlassEntryVar

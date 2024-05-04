@@ -11,6 +11,7 @@ export type Format = {
   id?: number;
   userID: number;
   name: string;
+  equation: string;
   createTime?: Date;
   deleteTime?: Date;
 }

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "esModuleInterop": true,
+    "target": "ES6",
     "lib": [
       "dom",
       "dom.iterable",
@@ -11,7 +12,6 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -31,9 +31,11 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
+    "**/*.mts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "next.config.js"
+    "next.config.js", 
+    "scripts/seed.schemas.mts"  
   ],
   "exclude": [
     "node_modules"
