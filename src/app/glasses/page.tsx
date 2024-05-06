@@ -2,9 +2,9 @@
 
 import { Divider } from 'antd'
 
-// import CalcEntry from './CalcEntry'
-import CalcComp from './calcComp'
-import CalcEntryByDB from './CalcEntryByDB'
+// import GlassEntry from './GlassEntry'
+import GlassComp from './GlassComp'
+import GlassEntryByDB from './GlassesByDB'
 
 export default function Page() {
   return (
@@ -12,16 +12,10 @@ export default function Page() {
       display: 'auto', flexWrap: 'nowrap', height: '100vh', margin: 0, padding: 0,
     }}
     >
-      <CalcComp idd={1} />
-
-      {/*
-      <Divider dashed />
-      <Divider dashed />
-      <CalcEntry order_id={20240405001} />
-      */}
+      <GlassComp idd={1} />
 
       <Divider dashed />
-      <CalcEntryByDB userID={1} />
+      <GlassEntryByDB userID={1} />
     </div>
   )
 }

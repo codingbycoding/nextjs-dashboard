@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react'
 import { Button } from 'antd'
 import axios from 'axios'
 
-import { Format, Order } from '@/models/models'
+import {
+  Format, Color, Glass, Order,
+} from '@/models/models'
 
 type Option = {
   value: string;
@@ -23,11 +25,20 @@ const glassOptions: Option[] = [
   { value: 'c', label: '长虹' },
 ]
 
+const colorOptions: Option[] = [
+  { value: 'a', label: '白铝' },
+  { value: 'b', label: '彩铝' },
+  { value: 'c', label: '凤铝' },
+]
+
 let selectedFormation
 
 export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }) {
   const [selectedFormationX, setSelectedFormation] = useState(undefined)
+  const [selectedColor, setSelectedColor] = useState(undefined)
+  const [selectedGlass, setSelectedGlass] = useState(undefined)
   const [selectedOption, setSelectedOption] = useState<string>('a')
+  const [colorSelectedOption, setColorSelectedOption] = useState<string>('a')
   const [glassSelectedOption, setGlassSelectedOption] = useState<string>('a')
   const [glassFSelectedOption, setGlassFSelectedOption] = useState<string>('a')
   const [note, setNote] = useState<string>('')
@@ -46,6 +57,10 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
 
   const handleGlassOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setGlassSelectedOption(event.target.value)
+  }
+
+  const handleColorOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setColorSelectedOption(event.target.value)
   }
 
   const handleGlassFOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -114,19 +129,60 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     return updatedOrder
   }
 
-  const formatValue = (value: number, decimalPlaces: number): number => {
-    const isInteger = Number.isInteger(value)
-    const formattedValue = isInteger ? value.toFixed(0) : value.toFixed(decimalPlaces)
-    return Number.parseFloat(formattedValue)
-  }
-
   const refresh = () => {
     // eslint-disable-next-line no-restricted-globals
     location.reload()
   }
 
-  const [dbFormats, setDbFormats] = useState([])
+  useEffect(() => {
+    const getColors = async () => {
+      try {
+        const res = await axios.get('/api/mock/colors')
+        if (res.status === 200) {
+          console.log('dbColors', res.data.colors)
+          while (colorOptions.pop()) ;
 
+          const newColors = res.data.colors
+          newColors.forEach((color : Color) => {
+            colorOptions.push({ value: color.name, label: color.name })
+          })
+          console.log('colorOptions:', colorOptions)
+          setSelectedColor(newColors[0])
+        }
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(err.message)
+        }
+      }
+    }
+    getColors()
+  }, [userID])
+
+  useEffect(() => {
+    const getGlasses = async () => {
+      try {
+        const res = await axios.get('/api/mock/glasses')
+        if (res.status === 200) {
+          console.log('dbGlasses', res.data.glasses)
+          while (glassOptions.pop()) ;
+
+          const newGlasses = res.data.glasses
+          newGlasses.forEach((glass : Glass) => {
+            glassOptions.push({ value: glass.name, label: glass.name })
+          })
+          console.log('glassOptions:', glassOptions)
+          setSelectedGlass(newGlasses[0])
+        }
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(err.message)
+        }
+      }
+    }
+    getGlasses()
+  }, [userID])
+
+  const [dbFormats, setDbFormats] = useState([])
   useEffect(() => {
     const getFormats = async () => {
       try {
@@ -159,7 +215,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     }
 
     getFormats()
-  }, [userID]) // Depend on userID to refetch when it changes
+  }, [userID])
 
   const handleAddOrder = async () => {
     if (isNaN(宽) || isNaN(高) || note === '') {
@@ -211,6 +267,22 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         <label htmlFor={`dropdown-${idd}`}>选择类型:</label>
         <select id={`dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedOption} onChange={handleOptionChange}>
           {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div
+        className="column"
+        style={{
+          flex: 1, padding: 5, minWidth: '92px', boxSizing: 'border-box',
+        }}
+      >
+        <label htmlFor={`color-dropdown-${idd}`} style={{ display: 'block' }}>型材类型</label>
+        <select id={`color-dropdown-${idd}`} style={{ minHeight: 24 }} value={colorSelectedOption} onChange={handleColorOptionChange}>
+          {colorOptions.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>

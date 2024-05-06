@@ -8,6 +8,12 @@ output {
     display: block;
 }
 
+.glass-left-w {
+    min-width: 200px;
+    max-width: 200px;
+    width: 200px;
+}
+
 .format-left-w {
     min-width: 200px;
     max-width: 200px;
@@ -110,6 +116,11 @@ div.column-plus-circle {
     max-width: 500px;
 }
 
+div.glass-column-plus-circle {
+    width: 150px;
+    max-width: 350px;
+}
+
 div.parent:hover .calc-entry td  {
     overflow: visible;
     white-space: normal;
@@ -139,6 +150,22 @@ div.parent:hover .calc-entry td  {
   }
 
   div.parent-div-for-formats > div:nth-child(even) {
+      background-color: white;
+  }
+
+  div.parent-div-for-glasses > div:nth-child(odd) {
+     background-color: LightSkyBlue;
+  }
+
+  div.parent-div-for-glasses > div:nth-child(even) {
+      background-color: white;
+  }
+
+  div.parent-div-for-colors > div:nth-child(odd) {
+     background-color: LightSkyBlue;
+  }
+
+  div.parent-div-for-colors > div:nth-child(even) {
       background-color: white;
   }
 

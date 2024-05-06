@@ -7,6 +7,25 @@ export type User = {
   deleteTime?: Date;
 }
 
+export type Color = {
+  id?: number;
+  userID: number;
+  name: string;
+  note: string;
+  createTime?: Date;
+  deleteTime?: Date;
+}
+
+export type Glass = {
+  id?: number;
+  userID: number;
+  name: string;
+  note: string;
+  list?: string;
+  createTime?: Date;
+  deleteTime?: Date;
+}
+
 export type Format = {
   id?: number;
   userID: number;

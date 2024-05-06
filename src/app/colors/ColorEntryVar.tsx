@@ -1,14 +1,14 @@
 'use client'
 
 import { Button } from 'antd'
-import { Order } from '@/models/models'
+import { Color } from '@/models/models'
 import axios from 'axios'
 
-const ColorEntryVar = ({ order } : { order: Order }) => {
+const ColorEntryVar = ({ color } : { color: Color }) => {
   const printTable = (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    console.log('printTable order_id:', order.id)
-    const printContents = document?.getElementById(`print-area-${order.id}`)?.innerHTML
+    console.log('printTable color_id:', color.id)
+    const printContents = document?.getElementById(`print-area-${color.id}`)?.innerHTML
     const originalContents = document.body.innerHTML
     document.body.innerHTML = printContents ?? ''
 
@@ -16,10 +16,10 @@ const ColorEntryVar = ({ order } : { order: Order }) => {
     document.body.innerHTML = originalContents
   }
 
-  const deleteOrder = async () => {
-    console.log('order_id:', order.id)
+  const deletecolor = async () => {
+    console.log('color_id:', color.id)
     try {
-      const res = await axios.delete(`api/mock/orders/${order.id}`)
+      const res = await axios.delete(`api/mock/colors/${color.id}`)
       if (res.status === 200) {
         console.log('status:', 200)
       }
@@ -37,59 +37,31 @@ const ColorEntryVar = ({ order } : { order: Order }) => {
     }
   }
 
-  const formatDateTime = (date : Date | undefined) : string => {
-    const formattedDate = date ? date.toString().slice(0, 19).replace('T', ' ') : ''
-    return formattedDate
-  }
-
-  const truncIfDotZero = (num : number) : number => {
-    const str = num?.toString() ?? ''
-    if (str.endsWith('.0')) {
-      return parseInt(str, 10)
-    }
-    return num
+  const colorDateTime = (date : Date | undefined) : string => {
+    const colortedDate = date ? date.toString().slice(0, 19).replace('T', ' ') : ''
+    return colortedDate
   }
 
   return (
-    <div id={`print-area-${order.id}`} className="parent">
+    <div id={`print-area-${color.id}`} className="parent">
       <table className="calc-entry">
         <thead>
           <tr>
             <th>日期</th>
+            <th>型材类型名称</th>
             <th>备注</th>
-            <th>类型</th>
-            <th>宽</th>
-            <th>高</th>
-            <th>光企(2支)</th>
-            <th>{ truncIfDotZero(order.gouQi) === 0 ? '' : '勾企(2支)' }</th>
-            <th>上下方(4支)</th>
-            <th>边封</th>
-            <th>上下轨</th>
-            <th>玻璃宽度</th>
-            <th>玻璃高度</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{ formatDateTime(order.createTime) }</td>
-            <td>{ order.note }</td>
-            <td>{ order.formatName }</td>
-            <td>{ truncIfDotZero(order.width) }</td>
-            <td>{ truncIfDotZero(order.height) }</td>
-            <td>{ truncIfDotZero(order.guangQi) }</td>
-
-            <td>{ truncIfDotZero(order.gouQi) === 0 ? '' : truncIfDotZero(order.gouQi) }</td>
-
-            <td>{ truncIfDotZero(order.shangXiaFang) }</td>
-            <td>{ truncIfDotZero(order.bianFeng) }</td>
-            <td>{ truncIfDotZero(order.shangXiaGui) }</td>
-            <td>{ truncIfDotZero(order.glassWidth) }</td>
-            <td>{ truncIfDotZero(order.glassHeight) }</td>
+            <td>{ colorDateTime(color.createTime) }</td>
+            <td>{ color.name }</td>
+            <td>{ color.note }</td>
           </tr>
         </tbody>
       </table>
       <div className="child">
-        <Button danger className="element-to-hide-when-print calcEntry" type="primary" onClick={deleteOrder}>删除</Button>
+        <Button danger className="element-to-hide-when-print calcEntry" type="primary" onClick={deletecolor}>删除</Button>
       </div>
       <div className="child">
         <Button className="element-to-hide-when-print calcEntry" type="primary" onClick={printTable}>打印</Button>

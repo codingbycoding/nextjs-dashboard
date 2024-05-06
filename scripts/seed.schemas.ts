@@ -87,6 +87,48 @@ async function seedFormats() {
   }
 }
 
+async function seedGlasses() {
+  try {
+    // Create the "glasses" table if it doesn't exist
+    const createTable = await sql`
+    CREATE TABLE IF NOT EXISTS glasses (
+    id BIGSERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    note VARCHAR(255) NULL,
+    create_time TIMESTAMP NOT NULL,
+    delete_time TIMESTAMP
+  )
+`
+
+    console.log('Created "glasses" table')
+
+    // Insert data into the "glasses" table
+    const insertedGlasses = await Promise.all(
+      glasses.map(
+        (glass : Glass) => sql`
+        INSERT INTO glasses (user_id, name, note, create_time)
+        VALUES (${glass.userID}, ${glass.name}, ${glass.note}, ${glass.createTime})
+      `,
+      ),
+    )
+
+    console.log(`Seeded ${insertedGlasses.length} glasses`)
+
+    // -- Alter the sequence to start from 10000
+    const alterTable = await sql`ALTER SEQUENCE glasses_id_seq RESTART WITH 10000`
+
+    return {
+      createTable,
+      alterTable,
+      glasses: insertedGlasses,
+    }
+  } catch (error) {
+    console.error('Error seeding glasses:', error)
+    throw error
+  }
+}
+
 async function seedOrders() {
   try {
     // Create the "orders" table if it doesn't exist

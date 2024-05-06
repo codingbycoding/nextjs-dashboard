@@ -41,6 +41,14 @@ export default function SidebarNav() {
         样式
         <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
       </SidebarNavItem>
+      <SidebarNavItem icon={faCode} href="/glasses">
+        玻璃
+        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+      </SidebarNavItem>
+      <SidebarNavItem icon={faCode} href="/colors">
+        型材
+        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+      </SidebarNavItem>
       <SidebarNavItem icon={faGauge} href="/">
         仪表盘
         <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
