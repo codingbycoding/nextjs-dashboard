@@ -49,6 +49,10 @@ export default function SidebarNav() {
         型材
         <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
       </SidebarNavItem>
+      <SidebarNavItem icon={faCode} href="/customers">
+        客户
+        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+      </SidebarNavItem>
       <SidebarNavItem icon={faGauge} href="/">
         仪表盘
         <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>

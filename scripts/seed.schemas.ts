@@ -46,6 +46,48 @@ async function seedUsers() {
   }
 }
 
+async function seedCustomers() {
+  try {
+    // Create the "customers" table if it doesn't exist
+    const createTable = await sql`
+    CREATE TABLE IF NOT EXISTS wdw_customers (
+    id BIGSERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    mobile NUMERIC(11) NOT NULL,
+    encoded_data VARCHAR(1024) NOT NULL,
+    create_time TIMESTAMP NOT NULL,
+    delete_time TIMESTAMP
+  )
+`
+
+    console.log('Created "customers" table')
+
+    const insertedCustomers = await Promise.all(
+      customers.map(
+        (customer : Customers) => sql`
+        INSERT INTO customers (user_id, name, mobile, create_time)
+        VALUES (${format.userID}, ${format.name}, ${format.mobile}, ${format.createTime})
+      `,
+      ),
+    )
+
+    console.log(`Seeded ${insertedCustomers.length} customers`)
+
+    // -- Alter the sequence to start from 10000
+    const alterTable = await sql`ALTER SEQUENCE customers_id_seq RESTART WITH 10000`
+
+    return {
+      createTable,
+      alterTable,
+      customers: insertedCustomers,
+    }
+  } catch (error) {
+    console.error('Error seeding customers:', error)
+    throw error
+  }
+}
+
 async function seedFormats() {
   try {
     // Create the "formats" table if it doesn't exist
@@ -54,6 +96,7 @@ async function seedFormats() {
     id BIGSERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
+    data VARCHAR(1024) NULL,
     create_time TIMESTAMP NOT NULL,
     delete_time TIMESTAMP
   )

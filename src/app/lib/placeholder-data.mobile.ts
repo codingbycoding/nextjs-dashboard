@@ -1,7 +1,9 @@
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
 
-import { User, Format, Order } from '../../models/models'
+import {
+  User, Customer, Format, Order,
+} from '../../models/models'
 
 const ids = [
   10000,
@@ -23,20 +25,36 @@ export const users : User[] = [
   },
 ]
 
+export const customers : Customer[] = [
+  {
+    userID: 0,
+    name: '大金',
+    mobile: 15618953660,
+  },
+  {
+    userID: 0,
+    name: '二钥',
+    mobile: 18521019489,
+  },
+]
+
 export const formats : Format[] = [
   {
     name: '打85移门料子',
     userID: ids[0],
+    equation: '',
     createTime: new Date('2023-11-14 12:00:01'),
   },
   {
     name: '极窄双扇1635',
     userID: ids[0],
+    equation: '',
     createTime: new Date('2024-01-14 12:00:01'),
   },
   {
     name: '极窄三联动1635(不锈钢下轨)',
     userID: ids[0],
+    equation: '',
     createTime: new Date('2024-02-14 12:00:01'),
   },
 ]

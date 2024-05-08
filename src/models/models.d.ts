@@ -7,6 +7,17 @@ export type User = {
   deleteTime?: Date;
 }
 
+export type Customer = {
+  id?: number;
+  userID: number;
+  name: string;
+  mobile: number;
+  encoded_data: string;
+  kvs?: unknown;
+  createTime?: Date;
+  deleteTime?: Date;
+}
+
 export type Color = {
   id?: number;
   userID: number;
@@ -43,11 +54,6 @@ export type Order = {
   note?: string;
   width?: number;
   height?: number;
-  shangXiaGui?: number;
-  shangXiaFang?: number;
-  guangQi?: number;
-  gouQi?: number;
-  bianFeng?: number;
   glassWidth?: number;
   glassHeight?: number;
   equation?: string;

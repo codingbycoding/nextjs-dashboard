@@ -6,6 +6,7 @@ import axios from 'axios'
 
 import {
   Format, Color, Glass, Order,
+  Customer,
 } from '@/models/models'
 
 type Option = {
@@ -13,58 +14,81 @@ type Option = {
   label: string;
 }
 
-const options = [
+const customerOpts = [
   { value: 'a', label: '打85移门料子' },
   { value: 'b', label: '极窄双扇1635' },
   { value: 'c', label: '极窄三联动1635(不锈钢下轨)' },
 ]
 
-const glassOptions: Option[] = [
+const formatOpts = [
+  { value: 'a', label: '打85移门料子' },
+  { value: 'b', label: '极窄双扇1635' },
+  { value: 'c', label: '极窄三联动1635(不锈钢下轨)' },
+]
+
+const glassOpts: Option[] = [
   { value: 'a', label: '白玻' },
   { value: 'b', label: '磨砂' },
   { value: 'c', label: '长虹' },
 ]
 
-const colorOptions: Option[] = [
+const colorOpts: Option[] = [
   { value: 'a', label: '白铝' },
   { value: 'b', label: '彩铝' },
   { value: 'c', label: '凤铝' },
 ]
 
-let selectedFormation
+let selectedFormat: Format
+let selectedCustomer: Customer
 
 export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }) {
-  const [selectedFormationX, setSelectedFormation] = useState(undefined)
-  const [selectedColor, setSelectedColor] = useState(undefined)
-  const [selectedGlass, setSelectedGlass] = useState(undefined)
-  const [selectedOption, setSelectedOption] = useState<string>('a')
-  const [colorSelectedOption, setColorSelectedOption] = useState<string>('a')
-  const [glassSelectedOption, setGlassSelectedOption] = useState<string>('a')
-  const [glassFSelectedOption, setGlassFSelectedOption] = useState<string>('a')
+  const [selectedCustomerX, setSelectedCustomer] = useState(undefined as unknown as Format)
+  const [selectedFormatX, setSelectedFormat] = useState(undefined as unknown as Format)
+  const [selectedColor, setSelectedColor] = useState(undefined as unknown as Color)
+  const [selectedGlass, setSelectedGlass] = useState(undefined as unknown as Glass)
+
+  const [selectedCustomerOpt, setSelectedCustomerOpt] = useState<string>('a')
+  const [selectedFormatOpt, setSelectedFormatOpt] = useState<string>('a')
+  const [colorSelectedOpt, setColorSelectedOpt] = useState<string>('a')
+  const [glassSelectedOpt, setGlassSelectedOpt] = useState<string>('a')
+  const [glassFSelectedOpt, setGlassFSelectedOpt] = useState<string>('a')
+
   const [note, setNote] = useState<string>('')
+
   const [宽, set宽] = useState<string>('')
   const [高, set高] = useState<string>('')
   const [widthError, setWidthError] = useState<string>('')
   const [heightError, setHeightError] = useState<string>('')
+
   const [confirmError, setConfirmError] = useState<string>('')
 
-  const handleOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedOption(event.target.value)
-    selectedFormation = dbFormats.find((format) => format.name === event.target.value)
-    console.log('setSelectedOption:', selectedFormation)
-    setSelectedFormation(selectedFormation)
+  const [dbFormats, setDbFormats] = useState([] as Format[])
+  const [dbCustomers, setDbCustomers] = useState([] as Customer[])
+
+  const handleCustomerOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCustomerOpt(event.target.value)
+    selectedCustomer = dbCustomers.find((customer) => customer.name === event.target.value) as Customer
+    console.log('setSelectedCustomer:', selectedCustomer)
+    setSelectedCustomer(selectedCustomer)
+  }
+
+  const handleFormatOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFormatOpt(event.target.value)
+    selectedFormat = dbFormats.find((format) => format.name === event.target.value) as Format
+    console.log('setSelectedFormat:', selectedFormat)
+    setSelectedFormat(selectedFormat)
   }
 
   const handleGlassOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setGlassSelectedOption(event.target.value)
+    setGlassSelectedOpt(event.target.value)
   }
 
   const handleColorOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setColorSelectedOption(event.target.value)
+    setColorSelectedOpt(event.target.value)
   }
 
   const handleGlassFOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setGlassFSelectedOption(event.target.value)
+    setGlassFSelectedOpt(event.target.value)
   }
 
   const handleWidthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,14 +119,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
 
   const calcOrder = () => {
     const order = {
-      formatName: selectedFormationX?.name ?? '',
-      guangQi: 0,
-      shangXiaFang: 0,
-      gouQi: 0,
-      bianFeng: 0,
-      shangXiaGui: 0,
-      glassWidth: 0,
-      glassHeight: 0,
+      formatName: selectedFormatX?.name ?? '',
       id: 0,
       note,
       formatID: 0,
@@ -112,12 +129,12 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
       userID: 0,
     } as unknown as Order
 
-    if (selectedFormationX === undefined || selectedFormationX?.equation === undefined) {
+    if (selectedFormatX === undefined || selectedFormatX?.equation === undefined) {
       return order
     }
 
     // Use reduce instead of map to avoid creating a new object in each iteration
-    const updatedOrder = Object.entries(selectedFormationX.equation).reduce(
+    const updatedOrder = Object.entries(selectedFormatX.equation).reduce(
       (acc, [key, value]) => {
         const val = (new Function('宽', '高', `return ${value}`))(宽, 高)
         return { ...acc, equation: { ...acc.equation, [key]: val } }
@@ -140,13 +157,13 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         const res = await axios.get('/api/mock/colors')
         if (res.status === 200) {
           console.log('dbColors', res.data.colors)
-          while (colorOptions.pop()) ;
+          while (colorOpts.pop()) ;
 
           const newColors = res.data.colors
           newColors.forEach((color : Color) => {
-            colorOptions.push({ value: color.name, label: color.name })
+            colorOpts.push({ value: color.name, label: color.name })
           })
-          console.log('colorOptions:', colorOptions)
+          console.log('colorOptions:', colorOpts)
           setSelectedColor(newColors[0])
         }
       } catch (err) {
@@ -164,13 +181,13 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         const res = await axios.get('/api/mock/glasses')
         if (res.status === 200) {
           console.log('dbGlasses', res.data.glasses)
-          while (glassOptions.pop()) ;
+          while (glassOpts.pop()) ;
 
           const newGlasses = res.data.glasses
           newGlasses.forEach((glass : Glass) => {
-            glassOptions.push({ value: glass.name, label: glass.name })
+            glassOpts.push({ value: glass.name, label: glass.name })
           })
-          console.log('glassOptions:', glassOptions)
+          console.log('glassOptions:', glassOpts)
           setSelectedGlass(newGlasses[0])
         }
       } catch (err) {
@@ -182,19 +199,52 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     getGlasses()
   }, [userID])
 
-  const [dbFormats, setDbFormats] = useState([])
+  useEffect(() => {
+    const getCustomers = async () => {
+      try {
+        const res = await axios.get('/api/mock/customers')
+        if (res.status === 200) {
+          console.log('dbCustomers', res.data.customers)
+          while (customerOpts.pop()) ;
+
+          const newCustomers = res.data.customers.map((customer: Customer) => {
+            try {
+              // customers.equation = JSON.parse(customers.equation)
+              customerOpts.push({ value: customer.name, label: customer.name })
+              return customer
+            } catch (err) {
+              console.error('Error parsing equation:', err)
+              return { name: customer.name, equation: {} }
+            }
+          })
+
+          console.log('customerOpts:', customerOpts)
+          selectedCustomer = newCustomers[0]
+          setSelectedCustomer(selectedCustomer)
+          setDbCustomers(newCustomers)
+        }
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(err.message)
+        }
+      }
+    }
+
+    getCustomers()
+  }, [userID])
+
   useEffect(() => {
     const getFormats = async () => {
       try {
         const res = await axios.get('/api/mock/formats')
         if (res.status === 200) {
           console.log('dbFormats', res.data.formats)
-          while (options.pop()) ;
+          while (formatOpts.pop()) ;
 
           const newFormats = res.data.formats.map((format: Format) => {
             try {
               format.equation = JSON.parse(format.equation)
-              options.push({ value: format.name, label: format.name })
+              formatOpts.push({ value: format.name, label: format.name })
               return format
             } catch (err) {
               console.error('Error parsing equation:', err)
@@ -202,9 +252,9 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
             }
           })
 
-          console.log('options:', options)
-          selectedFormation = newFormats[0]
-          setSelectedFormation(selectedFormation)
+          console.log('options:', formatOpts)
+          selectedFormat = newFormats[0]
+          setSelectedFormat(selectedFormat)
           setDbFormats(newFormats)
         }
       } catch (err) {
@@ -253,6 +303,18 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         display: 'flex', flexWrap: 'nowrap', height: '60px', margin: 0, padding: 0, alignItems: 'left',
       }}
     >
+
+      <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
+        <label htmlFor={`dropdown-customer-${idd}`}>选择客户:</label>
+        <select id={`dropdown-customer-${idd}`} style={{ minHeight: 24 }} value={selectedCustomerOpt} onChange={handleCustomerOptionChange}>
+          {customerOpts.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div
         className="column"
         style={{
@@ -265,8 +327,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
         <label htmlFor={`dropdown-${idd}`}>选择类型:</label>
-        <select id={`dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedOption} onChange={handleOptionChange}>
-          {options.map((option) => (
+        <select id={`dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedFormatOpt} onChange={handleFormatOptionChange}>
+          {formatOpts.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -281,8 +343,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         }}
       >
         <label htmlFor={`color-dropdown-${idd}`} style={{ display: 'block' }}>型材类型</label>
-        <select id={`color-dropdown-${idd}`} style={{ minHeight: 24 }} value={colorSelectedOption} onChange={handleColorOptionChange}>
-          {colorOptions.map((option) => (
+        <select id={`color-dropdown-${idd}`} style={{ minHeight: 24 }} value={colorSelectedOpt} onChange={handleColorOptionChange}>
+          {colorOpts.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -297,8 +359,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         }}
       >
         <label htmlFor={`glass-dropdown-${idd}`} style={{ display: 'block' }}>正面玻璃</label>
-        <select id={`glass-dropdown-${idd}`} style={{ minHeight: 24 }} value={glassSelectedOption} onChange={handleGlassOptionChange}>
-          {glassOptions.map((option) => (
+        <select id={`glass-dropdown-${idd}`} style={{ minHeight: 24 }} value={glassSelectedOpt} onChange={handleGlassOptionChange}>
+          {glassOpts.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -313,8 +375,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         }}
       >
         <label htmlFor={`glass-f-dropdown-${idd}`} style={{ display: 'block' }}>背面玻璃</label>
-        <select id={`glass-f-dropdown-${idd}`} style={{ minHeight: 24 }} value={glassFSelectedOption} onChange={handleGlassFOptionChange}>
-          {glassOptions.map((option) => (
+        <select id={`glass-f-dropdown-${idd}`} style={{ minHeight: 24 }} value={glassFSelectedOpt} onChange={handleGlassFOptionChange}>
+          {glassOpts.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>
@@ -344,8 +406,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         {heightError && <span style={{ color: 'red' }}>{heightError}</span>}
       </div>
 
-      {selectedFormationX && selectedFormationX.equation ? (
-        Object.entries(selectedFormationX.equation).map(([key, value]) => (
+      {selectedFormatX && selectedFormatX.equation ? (
+        Object.entries(selectedFormatX.equation).map(([key, value]) => (
           <div
             key={key}
             className="column"
