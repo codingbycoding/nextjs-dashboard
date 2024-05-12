@@ -1,8 +1,9 @@
 'use client'
 
 import { Button } from 'antd'
-import { Customer } from '@/models/models'
 import axios from 'axios'
+
+import { Customer } from '@/models/models'
 
 const CustomerEntryVar = ({ customer } : { customer: Customer }) => {
   const printTable = (e: { preventDefault: () => void }) => {

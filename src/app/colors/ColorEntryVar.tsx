@@ -1,8 +1,9 @@
 'use client'
 
 import { Button } from 'antd'
-import { Color } from '@/models/models'
 import axios from 'axios'
+
+import { Color } from '@/models/models'
 
 const ColorEntryVar = ({ color } : { color: Color }) => {
   const printTable = (e: { preventDefault: () => void }) => {

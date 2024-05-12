@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-implied-eval */
+/* eslint-disable max-len */
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -5,8 +8,7 @@ import { Button } from 'antd'
 import axios from 'axios'
 
 import {
-  Format, Color, Glass, Order,
-  Customer,
+  Format, Color, Glass, Order, Customer,
 } from '@/models/models'
 
 type Option = {
@@ -14,44 +16,29 @@ type Option = {
   label: string;
 }
 
-const customerOpts = [
-  { value: 'a', label: '打85移门料子' },
-  { value: 'b', label: '极窄双扇1635' },
-  { value: 'c', label: '极窄三联动1635(不锈钢下轨)' },
-]
+type KV = {
+  k: string;
+  v: string;
+}
 
-const formatOpts = [
-  { value: 'a', label: '打85移门料子' },
-  { value: 'b', label: '极窄双扇1635' },
-  { value: 'c', label: '极窄三联动1635(不锈钢下轨)' },
-]
-
-const glassOpts: Option[] = [
-  { value: 'a', label: '白玻' },
-  { value: 'b', label: '磨砂' },
-  { value: 'c', label: '长虹' },
-]
-
-const colorOpts: Option[] = [
-  { value: 'a', label: '白铝' },
-  { value: 'b', label: '彩铝' },
-  { value: 'c', label: '凤铝' },
-]
-
-let selectedFormat: Format
-let selectedCustomer: Customer
+const customerOpts = [] as Option[]
+const formatOpts = [] as Option[]
+const glassOpts = [] as Option[]
+const colorOpts = [] as Option[]
 
 export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }) {
-  const [selectedCustomerX, setSelectedCustomer] = useState(undefined as unknown as Format)
-  const [selectedFormatX, setSelectedFormat] = useState(undefined as unknown as Format)
+  const [selectedCustomer, setSelectedCustomer] = useState(undefined as unknown as Customer)
+  const [selectedFormat, setSelectedFormat] = useState(undefined as unknown as Format)
+
+  /*
   const [selectedColor, setSelectedColor] = useState(undefined as unknown as Color)
   const [selectedGlass, setSelectedGlass] = useState(undefined as unknown as Glass)
+  const [selectedGlassF, setSelectedGlassF] = useState(undefined as unknown as Glass)
+  */
 
-  const [selectedCustomerOpt, setSelectedCustomerOpt] = useState<string>('a')
-  const [selectedFormatOpt, setSelectedFormatOpt] = useState<string>('a')
-  const [colorSelectedOpt, setColorSelectedOpt] = useState<string>('a')
-  const [glassSelectedOpt, setGlassSelectedOpt] = useState<string>('a')
-  const [glassFSelectedOpt, setGlassFSelectedOpt] = useState<string>('a')
+  const [selectedColorOpt, setColorSelectedOpt] = useState<string>('')
+  const [selectedGlassOpt, setGlassSelectedOpt] = useState<string>('')
+  const [selectedGlassFOpt, setGlassFSelectedOpt] = useState<string>('')
 
   const [note, setNote] = useState<string>('')
 
@@ -65,29 +52,23 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
   const [dbFormats, setDbFormats] = useState([] as Format[])
   const [dbCustomers, setDbCustomers] = useState([] as Customer[])
 
-  const handleCustomerOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCustomerOpt(event.target.value)
-    selectedCustomer = dbCustomers.find((customer) => customer.name === event.target.value) as Customer
-    console.log('setSelectedCustomer:', selectedCustomer)
-    setSelectedCustomer(selectedCustomer)
+  const handleCustomerOptChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCustomer(dbCustomers.find((customer) => customer.name === event.target.value) as Customer)
   }
 
-  const handleFormatOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFormatOpt(event.target.value)
-    selectedFormat = dbFormats.find((format) => format.name === event.target.value) as Format
-    console.log('setSelectedFormat:', selectedFormat)
-    setSelectedFormat(selectedFormat)
+  const handleFormatOptChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedFormat(dbFormats.find((format) => format.name === event.target.value) as Format)
   }
 
-  const handleGlassOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setGlassSelectedOpt(event.target.value)
-  }
-
-  const handleColorOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleColorOptChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setColorSelectedOpt(event.target.value)
   }
 
-  const handleGlassFOptionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleGlassOptChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setGlassSelectedOpt(event.target.value)
+  }
+
+  const handleGlassFOptChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setGlassFSelectedOpt(event.target.value)
   }
 
@@ -119,25 +100,37 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
 
   const calcOrder = () => {
     const order = {
-      formatName: selectedFormatX?.name ?? '',
-      id: 0,
+      formatName: selectedFormat?.name ?? '',
+      customerID: selectedCustomer?.id,
       note,
       formatID: 0,
       width: parseFloat(宽),
       height: parseFloat(高),
-      equation: { 宽, 高 },
+      // equation: { 宽, 高 },
+      equation: [],
       userID: 0,
     } as unknown as Order
 
-    if (selectedFormatX === undefined || selectedFormatX?.equation === undefined) {
+    if (selectedFormat === undefined || selectedFormat?.equation === undefined) {
       return order
     }
 
+    order.equation = [
+      ...order.equation,
+      { k: '客户', v: selectedCustomer?.name ?? '' },
+      { k: '备注', v: note ?? '' },
+      { k: '类型', v: selectedFormat?.name ?? '' },
+      { k: '型材', v: selectedColorOpt ?? '' },
+      { k: '宽', v: 宽 ?? '' },
+      { k: '高', v: 高 ?? '' },
+      { k: '正面玻璃类型', v: selectedGlassOpt ?? '' },
+      { k: '背面玻璃类型', v: selectedGlassFOpt ?? '' }]
+
     // Use reduce instead of map to avoid creating a new object in each iteration
-    const updatedOrder = Object.entries(selectedFormatX.equation).reduce(
+    const updatedOrder = Object.entries(selectedFormat.equation).reduce(
       (acc, [key, value]) => {
         const val = (new Function('宽', '高', `return ${value}`))(宽, 高)
-        return { ...acc, equation: { ...acc.equation, [key]: val } }
+        return { ...acc, equation: [...acc.equation, { k: key, v: val }] }
       },
       order,
     )
@@ -164,7 +157,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
             colorOpts.push({ value: color.name, label: color.name })
           })
           console.log('colorOptions:', colorOpts)
-          setSelectedColor(newColors[0])
+          setColorSelectedOpt(newColors[0].name)
+          // setSelectedColor(newColors[0])
         }
       } catch (err) {
         if (err instanceof Error) {
@@ -188,7 +182,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
             glassOpts.push({ value: glass.name, label: glass.name })
           })
           console.log('glassOptions:', glassOpts)
-          setSelectedGlass(newGlasses[0])
+          setGlassSelectedOpt(newGlasses[0].name)
+          setGlassFSelectedOpt(newGlasses[0].name)
         }
       } catch (err) {
         if (err instanceof Error) {
@@ -219,8 +214,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
           })
 
           console.log('customerOpts:', customerOpts)
-          selectedCustomer = newCustomers[0]
-          setSelectedCustomer(selectedCustomer)
+          setSelectedCustomer(newCustomers[0])
           setDbCustomers(newCustomers)
         }
       } catch (err) {
@@ -253,8 +247,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
           })
 
           console.log('options:', formatOpts)
-          selectedFormat = newFormats[0]
-          setSelectedFormat(selectedFormat)
+          setSelectedFormat(newFormats[0])
           setDbFormats(newFormats)
         }
       } catch (err) {
@@ -306,7 +299,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
         <label htmlFor={`dropdown-customer-${idd}`}>选择客户:</label>
-        <select id={`dropdown-customer-${idd}`} style={{ minHeight: 24 }} value={selectedCustomerOpt} onChange={handleCustomerOptionChange}>
+        <select id={`dropdown-customer-${idd}`} style={{ minHeight: 24 }} value={selectedCustomer?.name ?? ''} onChange={handleCustomerOptChange}>
           {customerOpts.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
@@ -326,11 +319,11 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
       </div>
 
       <div className="column" style={{ flex: 1, padding: 5, boxSizing: 'border-box' }}>
-        <label htmlFor={`dropdown-${idd}`}>选择类型:</label>
-        <select id={`dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedFormatOpt} onChange={handleFormatOptionChange}>
-          {formatOpts.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+        <label htmlFor={`dropdown-format-${idd}`}>选择类型:</label>
+        <select id={`dropdown-format-${idd}`} style={{ minHeight: 24 }} value={selectedFormat?.name ?? ''} onChange={handleFormatOptChange}>
+          {formatOpts.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
             </option>
           ))}
         </select>
@@ -342,11 +335,11 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
           flex: 1, padding: 5, minWidth: '92px', boxSizing: 'border-box',
         }}
       >
-        <label htmlFor={`color-dropdown-${idd}`} style={{ display: 'block' }}>型材类型</label>
-        <select id={`color-dropdown-${idd}`} style={{ minHeight: 24 }} value={colorSelectedOpt} onChange={handleColorOptionChange}>
-          {colorOpts.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+        <label htmlFor={`dropdown-color-${idd}`} style={{ display: 'block' }}>型材类型</label>
+        <select id={`dropdown-color-${idd}`} style={{ minHeight: 24 }} value={selectedColorOpt} onChange={handleColorOptChange}>
+          {colorOpts.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
             </option>
           ))}
         </select>
@@ -359,10 +352,10 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         }}
       >
         <label htmlFor={`glass-dropdown-${idd}`} style={{ display: 'block' }}>正面玻璃</label>
-        <select id={`glass-dropdown-${idd}`} style={{ minHeight: 24 }} value={glassSelectedOpt} onChange={handleGlassOptionChange}>
-          {glassOpts.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+        <select id={`glass-dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedGlassOpt} onChange={handleGlassOptChange}>
+          {glassOpts.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
             </option>
           ))}
         </select>
@@ -375,10 +368,10 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         }}
       >
         <label htmlFor={`glass-f-dropdown-${idd}`} style={{ display: 'block' }}>背面玻璃</label>
-        <select id={`glass-f-dropdown-${idd}`} style={{ minHeight: 24 }} value={glassFSelectedOpt} onChange={handleGlassFOptionChange}>
-          {glassOpts.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
+        <select id={`glass-f-dropdown-${idd}`} style={{ minHeight: 24 }} value={selectedGlassFOpt} onChange={handleGlassFOptChange}>
+          {glassOpts.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
             </option>
           ))}
         </select>
@@ -406,8 +399,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         {heightError && <span style={{ color: 'red' }}>{heightError}</span>}
       </div>
 
-      {selectedFormatX && selectedFormatX.equation ? (
-        Object.entries(selectedFormatX.equation).map(([key, value]) => (
+      {selectedFormat && selectedFormat.equation ? (
+        Object.entries(selectedFormat.equation).map(([key, value]) => (
           <div
             key={key}
             className="column"

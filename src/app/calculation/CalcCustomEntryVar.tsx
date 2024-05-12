@@ -6,11 +6,11 @@ import axios from 'axios'
 import { Order } from '@/models/models'
 
 const CalcCustomEntryVar = ({ order } : { order: Order }) => {
-  const equation = JSON.parse(order.equation ?? '')
+  const decodedEquation = JSON.parse(order.equation ?? '')
 
-  const printTable = (e: { preventDefault: () => void }) => {
+  const printOrder = (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    console.log('printTable order_id:', order.id)
+    console.log('printOrder order.id:', order.id)
     const printContents = document?.getElementById(`print-area-${order.id}`)?.innerHTML
     const originalContents = document.body.innerHTML
     document.body.innerHTML = printContents ?? ''
@@ -20,7 +20,7 @@ const CalcCustomEntryVar = ({ order } : { order: Order }) => {
   }
 
   const deleteOrder = async () => {
-    console.log('order_id:', order.id)
+    console.log('order.id:', order.id)
     try {
       const res = await axios.delete(`api/mock/orders/${order.id}`)
       if (res.status === 200) {
@@ -59,12 +59,11 @@ const CalcCustomEntryVar = ({ order } : { order: Order }) => {
         <thead>
           <tr>
             <th>日期</th>
-            <th>备注</th>
             {order.equation
-    && Object.entries(equation).map(([key]) => (
-      <th key={key}>
+    && Object.entries(decodedEquation).map(([key, value]) => (
+      <th key={value.k}>
         {' '}
-        {key}
+        {value.k}
         {' '}
       </th>
     ))}
@@ -73,12 +72,11 @@ const CalcCustomEntryVar = ({ order } : { order: Order }) => {
         <tbody>
           <tr>
             <td>{ formatDateTime(order.createTime) }</td>
-            <td>{ order.note }</td>
             {order.equation
-    && Object.entries(equation).map(([key, value]) => (
-      <th key={key}>
+    && Object.entries(decodedEquation).map(([key, value]) => (
+      <th key={value.k}>
         {' '}
-        {value}
+        {value.v}
         {' '}
       </th>
     ))}
@@ -90,7 +88,7 @@ const CalcCustomEntryVar = ({ order } : { order: Order }) => {
         <Button danger className="element-to-hide-when-print calcEntry" type="primary" onClick={deleteOrder}>删除</Button>
       </div>
       <div className="child">
-        <Button className="element-to-hide-when-print calcEntry" type="primary" onClick={printTable}>打印</Button>
+        <Button className="element-to-hide-when-print calcEntry" type="primary" onClick={printOrder}>打印</Button>
       </div>
     </div>
   )

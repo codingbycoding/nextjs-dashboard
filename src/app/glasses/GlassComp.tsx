@@ -34,7 +34,7 @@ export default function GlassComp({ idd }:{ idd:number }) {
 
   const refresh = () => {
     // eslint-disable-next-line no-restricted-globals
-    // location.reload()
+    location.reload()
   }
 
   const handleAddGlass = async () => {

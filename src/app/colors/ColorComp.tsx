@@ -9,7 +9,6 @@ import ColorInput from './ColorInput'
 
 export default function ColorComp({ idd }:{ idd:number }) {
   const [color, setcolor] = useState({ name: '', note: '', list: { } })
-  const [name, setName] = useState<string>('')
   const [note, setNote] = useState<string>('')
 
   const [inputList, setInputList] = useState([])
@@ -34,7 +33,7 @@ export default function ColorComp({ idd }:{ idd:number }) {
 
   const refresh = () => {
     // eslint-disable-next-line no-restricted-globals
-    // location.reload()
+    location.reload()
   }
 
   const handleAddcolor = async () => {
@@ -105,7 +104,7 @@ export default function ColorComp({ idd }:{ idd:number }) {
         <div
           className="column"
           style={{
-            display: 'flex', flex: 1, padding: 5, boxSizing: 'border-box',
+            display: 'flex', flex: 1, margin: 5, padding: 5, boxSizing: 'border-box',
           }}
         >
           <label htmlFor={`left-${3}`} className="color-left-w">型材类型名称</label>

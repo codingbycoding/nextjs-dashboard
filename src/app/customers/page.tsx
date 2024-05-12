@@ -12,7 +12,6 @@ export default function Page() {
     }}
     >
       <CustomerComp idd={1} />
-
       <Divider dashed />
       <CustomerEntryByDB userID={1} />
     </div>

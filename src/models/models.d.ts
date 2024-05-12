@@ -49,6 +49,7 @@ export type Format = {
 export type Order = {
   id?: number;
   userID?: number;
+  customerID?: number;
   formatID?: number;
   formatName?: string;
   note?: string;
@@ -56,7 +57,8 @@ export type Order = {
   height?: number;
   glassWidth?: number;
   glassHeight?: number;
-  equation?: string;
+  equation?: object[];
+  encoded_equation?: string;
   createTime?: Date;
   deleteTime?: Date;
 }

@@ -12,7 +12,7 @@ const CalcCustomEntryByDB = ({ userID } : { userID: number }) => {
       try {
         const res = await axios.get('/api/mock/orders')
         if (res.status === 200) {
-          console.log('dbOrders:', res.data.orders)
+          console.log('res.data.orders:', res.data.orders)
           setDbOrders(res.data.orders)
         }
       } catch (err) {
@@ -23,7 +23,7 @@ const CalcCustomEntryByDB = ({ userID } : { userID: number }) => {
     }
 
     getOrders()
-  }, [userID]) 
+  }, [userID])
 
   return (
     <div className="parent-div-for-orders">

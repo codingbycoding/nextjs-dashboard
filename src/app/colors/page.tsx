@@ -13,7 +13,6 @@ export default function Page() {
     }}
     >
       <ColorComp idd={1} />
-
       <Divider dashed />
       <GlassEntryByDB userID={1} />
     </div>

@@ -12,10 +12,9 @@ const ColorsByDB = ({ userID } : { userID: number }) => {
       try {
         const res = await axios.get('/api/mock/colors')
         if (res.status === 200) {
-          console.log('res.data.:', res.data)
-          console.log('dbColors:', res.data.colors)
+          console.log('res.data.colors:', res.data.colors)
           const { colors } = res.data
-          console.log('newColors:', colors)
+          console.log('colors:', colors)
           setDbColors(colors)
         }
       } catch (err) {
@@ -28,7 +27,7 @@ const ColorsByDB = ({ userID } : { userID: number }) => {
     getColors()
 
     console.log('dbColors:', dbColors)
-  }, [userID]) 
+  }, [userID])
 
   return (
     <div className="parent-div-for-colors">
