@@ -1,7 +1,9 @@
+/* eslint-disable no-console */
 import { NextRequest } from 'next/server'
 import * as jwt from 'jsonwebtoken'
 
 import {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getColors, addColor, addColors, deleteColor,
 } from '@/models/color'
 import { User, Color } from '@/models/models'
@@ -16,7 +18,7 @@ function decodeUserID(request : NextRequest) : number {
 
   const user = jsonStr.user as User
 
-  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET)
+  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET as jwt.Secret) as jwt.JwtPayload
   const userID = jwtDecoded?.user_id
 
   console.debug('user:', user)
@@ -37,8 +39,9 @@ export async function GET(request : NextRequest) {
   */
   const user = jsonStr.user as User
 
-  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET)
-  const userID = jwtDecoded?.user_id
+  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET as jwt.Secret) as jwt.JwtPayload
+  console.debug('jwtDecoded :', jwtDecoded)
+  const userID = jwtDecoded.user_id
 
   console.debug('user:', user)
   const colors = await getColors(userID)
@@ -55,7 +58,7 @@ export async function POST(request : NextRequest) {
 
   const user = jsonStr.user as User
 
-  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET)
+  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET as jwt.Secret) as jwt.JwtPayload
   const userID = jwtDecoded?.user_id
 
   console.debug('user:', user)
@@ -67,7 +70,7 @@ export async function POST(request : NextRequest) {
   }
 
   color.userID = userID
-  const colors = [] as Color[]
+  // const colors = [] as Color[]
 
   const list = JSON.parse(color.list ?? '')
 

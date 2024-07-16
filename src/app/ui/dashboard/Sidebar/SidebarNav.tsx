@@ -1,20 +1,14 @@
-import {
-  faAddressCard, /* faBell */ faFileLines, faStar,
-} from '@fortawesome/free-regular-svg-icons'
+import { faAddressCard, faFileLines, faStar } from '@fortawesome/free-regular-svg-icons'
 
 import {
   faBug,
-  /*
-  faCalculator,
-  faChartPie,
-  faDroplet,
-  faLayerGroup,
-  faLocationArrow,
-  faPencil,
-  faPuzzlePiece,
-  */
   faCode,
-  faGauge,
+  faCube,
+  faCalculator,
+  faEquals,
+  faUser,
+  faCogs,
+  // faGauge,
   faRightToBracket,
 } from '@fortawesome/free-solid-svg-icons'
 import React, { PropsWithChildren } from 'react'
@@ -33,37 +27,40 @@ const SidebarNavTitle = (props: PropsWithChildren) => {
 export default function SidebarNav() {
   return (
     <ul className="list-unstyled">
-      <SidebarNavItem icon={faCode} href="/calculation">
+      <SidebarNavItem icon={faCalculator} href="/calculation">
         下料
-        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+        <small className="ms-auto">{/* <Badge bg="info" className="ms-auto">新</Badge> */}</small>
       </SidebarNavItem>
-      <SidebarNavItem icon={faCode} href="/formats">
+      <SidebarNavItem icon={faEquals} href="/formats">
         样式
-        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+        <small className="ms-auto">{/* <Badge bg="info" className="ms-auto">新</Badge> */}</small>
       </SidebarNavItem>
-      <SidebarNavItem icon={faCode} href="/glasses">
+      <SidebarNavItem icon={faCube} href="/glasses">
         玻璃
-        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+        <small className="ms-auto">{/* <Badge bg="info" className="ms-auto">新</Badge> */}</small>
       </SidebarNavItem>
-      <SidebarNavItem icon={faCode} href="/colors">
+      <SidebarNavItem icon={faCogs} href="/colors">
         型材
-        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+        <small className="ms-auto">{/* <Badge bg="info" className="ms-auto">新</Badge> */}</small>
       </SidebarNavItem>
-      <SidebarNavItem icon={faCode} href="/customers">
+      <SidebarNavItem icon={faUser} href="/customers">
         客户
-        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+        <small className="ms-auto">{/* <Badge bg="info" className="ms-auto">新</Badge> */}</small>
       </SidebarNavItem>
+      {/*
       <SidebarNavItem icon={faGauge} href="/">
         仪表盘
-        <small className="ms-auto"><Badge bg="info" className="ms-auto">新</Badge></small>
+        <small className="ms-auto">{/* <Badge bg="info" className="ms-auto">新</Badge></small>
       </SidebarNavItem>
+      */}
       {/*
       <SidebarNavItem icon={faCode} href="/pokemons">
         样例
-        <small className="ms-auto"><Badge bg="danger" className="ms-auto">DEMO</Badge></small>
+        <small className="ms-auto">{/* <Badge bg="danger" className="ms-auto">DEMO</Badge></small>
       </SidebarNavItem>
       */}
 
+      {/* 
       <SidebarNavTitle>Extras</SidebarNavTitle>
 
       <SidebarNavGroup toggleIcon={faStar} toggleText="Pages">
@@ -73,6 +70,7 @@ export default function SidebarNav() {
       </SidebarNavGroup>
 
       <SidebarNavItem icon={faFileLines} href="#">Docs</SidebarNavItem>
+    */}
     </ul>
   )
 }

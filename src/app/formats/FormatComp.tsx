@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 'use client'
 
 import { useState } from 'react'
@@ -10,8 +12,9 @@ import FormatInput from './FormatInput'
 export default function FormatComp({ idd }:{ idd:number }) {
   const [format, setFormat] = useState({ name: '', equation: { } })
   const [note, setName] = useState<string>('')
+  const [nextId, setNextId] = useState(10)
 
-  const [inputList, setInputList] = useState([])
+  const [inputList, setInputList] = useState<{ idd:number }[]>([])
 
   const [confirmError, setConfirmError] = useState<string>('')
 
@@ -21,19 +24,20 @@ export default function FormatComp({ idd }:{ idd:number }) {
   }
 
   const onRemoveInput = (inputID : number) => {
-    const newInputList = inputList.filter((input) => input.idd !== inputID)
-    setInputList(newInputList)
+    setInputList(inputList.filter((input) => input.idd !== inputID))
     // console.log('format:', format)
   }
 
   const handleAddInput = () => {
     console.log('format:', format)
-    setInputList([...inputList, <FormatInput key={inputList.length + 10} idd={inputList.length + 10} onAdd={onAdd} onRemoveInput={onRemoveInput} />])
+
+    setNextId(nextId + 1)
+    setInputList([...inputList, { idd: nextId }])
   }
 
   const refresh = () => {
     // eslint-disable-next-line no-restricted-globals
-    // location.reload()
+    location.reload()
   }
 
   const handleAddformat = async () => {
@@ -105,15 +109,13 @@ export default function FormatComp({ idd }:{ idd:number }) {
           <input type="text" id={`note-${1}`} className="format-right-w" placeholder="极窄三联动1635(不锈钢下轨)" style={{ display: 'inline' }} onChange={(e) => setName(e.target.value)} />
         </div>
 
-        <FormatInput idd={3} readOnly leftV="宽" rightV="宽" />
-        <FormatInput idd={4} readOnly leftV="高" rightV="高" />
-        {/*
-          <FormatInput idd={5} leftV="光企" rightV="高 - 32" onAdd={onAdd} />
-        */
-        }
+        <FormatInput idd={3} readOnly leftV="宽" rightV="宽" onAdd={onAdd} onRemoveInput={onRemoveInput} />
+        <FormatInput idd={4} readOnly leftV="高" rightV="高" onAdd={onAdd} onRemoveInput={onRemoveInput} />
 
-        {inputList.map((input, index:number) => (
-          <div key={index}>{input}</div>
+        {inputList.map((input) => (
+          <div key={input.idd}>
+            <FormatInput idd={input.idd} readOnly={false} leftV="" rightV="" onAdd={onAdd} onRemoveInput={onRemoveInput} />
+          </div>
         ))}
       </div>
 

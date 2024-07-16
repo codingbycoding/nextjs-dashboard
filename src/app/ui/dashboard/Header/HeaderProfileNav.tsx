@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Badge,
   Dropdown,
@@ -19,7 +21,7 @@ import {
   faMessage,
   faUser,
 } from '@fortawesome/free-regular-svg-icons'
-import { PropsWithChildren } from 'react'
+import { useEffect, useState, PropsWithChildren } from 'react'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import {
   faGear, faListCheck, faLock, faPowerOff,
@@ -43,6 +45,23 @@ const ItemWithIcon = (props: ItemWithIconProps) => {
 }
 
 export default function HeaderProfileNav() {
+  const [cookies, setCookies] = useState({})
+  useEffect(() => {
+    const getCookies = () => {
+      const cookiesArray = document.cookie.split('; ')
+      const cookiesObj = {}
+      cookiesArray.forEach((cookie) => {
+        const [name, value] = cookie.split('=')
+        // cookiesObj[name] = value
+      })
+      setCookies(cookiesObj)
+    }
+
+    getCookies()
+  }, [])
+
+  console.debug('cookies:', cookies)
+
   return (
     <Nav>
       <Dropdown as={NavItem}>
@@ -58,6 +77,7 @@ export default function HeaderProfileNav() {
           </div>
         </DropdownToggle>
         <DropdownMenu className="pt-0">
+          {/*
           <DropdownHeader className="bg-light fw-bold rounded-top">Account</DropdownHeader>
           <Link href="#" passHref legacyBehavior>
             <DropdownItem>
@@ -79,7 +99,7 @@ export default function HeaderProfileNav() {
             <DropdownItem>
               <ItemWithIcon icon={faMessage}>
                 Messages
-                <Badge bg="warning" className="ms-2">42</Badge>
+                <Badge bg="warning" className="ms-2">0</Badge>
               </ItemWithIcon>
             </DropdownItem>
           </Link>
@@ -106,12 +126,12 @@ export default function HeaderProfileNav() {
               <ItemWithIcon icon={faFile}>Projects</ItemWithIcon>
             </DropdownItem>
           </Link>
-
           <DropdownDivider />
+        */}
 
           <HeaderLogout>
             <DropdownItem>
-              <ItemWithIcon icon={faPowerOff}>Logout</ItemWithIcon>
+              <ItemWithIcon icon={faPowerOff}>登出</ItemWithIcon>
             </DropdownItem>
           </HeaderLogout>
         </DropdownMenu>

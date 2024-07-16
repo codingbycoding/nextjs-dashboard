@@ -4,15 +4,14 @@ import {
   Alert, Button, Form, FormControl, InputGroup,
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faUser } from '@fortawesome/free-regular-svg-icons'
-import { faUser, faLock, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
 import { deleteCookie, getCookie } from 'cookies-next'
 import axios from 'axios'
 import InputGroupText from 'react-bootstrap/InputGroupText'
 
-import type { User } from '@/models/user'
+import type { User } from '@/models/models'
 
 export default function Register() {
   const redirectURL = '/calculation'
@@ -94,7 +93,7 @@ export default function Register() {
             aria-label="Mobile"
             onChange={(e) => setUser({
               ...user,
-              mobile: e.target.value,
+              mobile: parseInt(e.target.value, 10),
             })}
           />
         </InputGroup>

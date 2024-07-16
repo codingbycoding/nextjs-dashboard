@@ -18,7 +18,9 @@ export default function Header() {
           </svg>
         </Link>
         <div className="header-nav d-none d-md-flex">
+          {/*
           <HeaderFeaturedNav />
+        */}
         </div>
         <div className="header-nav ms-auto">
           <HeaderNotificationNav />
@@ -29,7 +31,9 @@ export default function Header() {
       </Container>
       <div className="header-divider border-top my-2 mx-sm-n2" />
       <Container fluid>
+        {/* 
         <Breadcrumb />
+        */ }
       </Container>
     </header>
   )

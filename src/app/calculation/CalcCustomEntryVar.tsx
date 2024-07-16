@@ -5,8 +5,14 @@ import axios from 'axios'
 
 import { Order } from '@/models/models'
 
+type KV = {
+  k: string;
+  v: string;
+}
+
 const CalcCustomEntryVar = ({ order } : { order: Order }) => {
-  const decodedEquation = JSON.parse(order.equation ?? '')
+  const decodedEquation = JSON.parse(order.equation as string ?? '') as KV[]
+  // const decodedEquation = JSON.parse(order.equation as unknown as string ?? '')
 
   const printOrder = (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -45,14 +51,6 @@ const CalcCustomEntryVar = ({ order } : { order: Order }) => {
     return formattedDate
   }
 
-  const truncIfDotZero = (num : number) : number => {
-    const str = num?.toString() ?? ''
-    if (str.endsWith('.0')) {
-      return parseInt(str, 10)
-    }
-    return num
-  }
-
   return (
     <div id={`print-area-${order.id}`} className="parent">
       <table className="calc-entry">
@@ -60,7 +58,7 @@ const CalcCustomEntryVar = ({ order } : { order: Order }) => {
           <tr>
             <th>日期</th>
             {order.equation
-    && Object.entries(decodedEquation).map(([key, value]) => (
+    && Object.entries(decodedEquation).map(([, value]) => (
       <th key={value.k}>
         {' '}
         {value.k}
@@ -73,7 +71,7 @@ const CalcCustomEntryVar = ({ order } : { order: Order }) => {
           <tr>
             <td>{ formatDateTime(order.createTime) }</td>
             {order.equation
-    && Object.entries(decodedEquation).map(([key, value]) => (
+    && Object.entries(decodedEquation).map(([, value]) => (
       <th key={value.k}>
         {' '}
         {value.v}

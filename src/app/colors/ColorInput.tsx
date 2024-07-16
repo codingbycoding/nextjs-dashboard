@@ -48,7 +48,7 @@ export default function ColorInput({
           marginLeft: 10,
         }}
       />
-      <MinusCircleTwoTone onClick={onRemoveInput} />
+      <MinusCircleTwoTone onClick={() => onRemoveInput(idd)} />
     </div>
   )
 }

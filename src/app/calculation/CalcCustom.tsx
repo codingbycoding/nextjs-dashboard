@@ -30,12 +30,6 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
   const [selectedCustomer, setSelectedCustomer] = useState(undefined as unknown as Customer)
   const [selectedFormat, setSelectedFormat] = useState(undefined as unknown as Format)
 
-  /*
-  const [selectedColor, setSelectedColor] = useState(undefined as unknown as Color)
-  const [selectedGlass, setSelectedGlass] = useState(undefined as unknown as Glass)
-  const [selectedGlassF, setSelectedGlassF] = useState(undefined as unknown as Glass)
-  */
-
   const [selectedColorOpt, setColorSelectedOpt] = useState<string>('')
   const [selectedGlassOpt, setGlassSelectedOpt] = useState<string>('')
   const [selectedGlassFOpt, setGlassFSelectedOpt] = useState<string>('')
@@ -90,12 +84,6 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
       setHeightError('')
       set高(value)
     }
-
-    /*
-    if (value !== '' && 宽 !== '') {
-
-    }
-    */
   }
 
   const calcOrder = () => {
@@ -106,7 +94,6 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
       formatID: 0,
       width: parseFloat(宽),
       height: parseFloat(高),
-      // equation: { 宽, 高 },
       equation: [],
       userID: 0,
     } as unknown as Order
@@ -116,7 +103,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     }
 
     order.equation = [
-      ...order.equation,
+      ...(order.equation as object[] || []),
       { k: '客户', v: selectedCustomer?.name ?? '' },
       { k: '备注', v: note ?? '' },
       { k: '类型', v: selectedFormat?.name ?? '' },
@@ -127,10 +114,10 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
       { k: '背面玻璃类型', v: selectedGlassFOpt ?? '' }]
 
     // Use reduce instead of map to avoid creating a new object in each iteration
-    const updatedOrder = Object.entries(selectedFormat.equation).reduce(
+    const updatedOrder = Object.entries(selectedFormat.equation as object[]).reduce(
       (acc, [key, value]) => {
         const val = (new Function('宽', '高', `return ${value}`))(宽, 高)
-        return { ...acc, equation: [...acc.equation, { k: key, v: val }] }
+        return { ...acc, equation: [...(acc.equation as object[] || []), { k: key, v: val }] }
       },
       order,
     )
@@ -237,7 +224,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
 
           const newFormats = res.data.formats.map((format: Format) => {
             try {
-              format.equation = JSON.parse(format.equation)
+              format.equation = JSON.parse(format.equation as string) as object[]
               formatOpts.push({ value: format.name, label: format.name })
               return format
             } catch (err) {
@@ -261,13 +248,13 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
   }, [userID])
 
   const handleAddOrder = async () => {
-    if (isNaN(宽) || isNaN(高) || note === '') {
+    if (isNaN(parseFloat(宽)) || isNaN(parseFloat(高)) || note === '') {
       console.error('error 宽 and 高 should be numbers')
       setConfirmError('请检查所有输入')
       return
     }
 
-    const order = calcOrder()
+    const order = calcOrder() as Order
     order.equation = JSON.stringify(order.equation)
 
     console.log('outputs order:', order)
@@ -413,7 +400,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
             }}
           >
             <label htmlFor={key}>{key}</label>
-            <output id={key}>{高 !== '' && 宽 !== '' && (new Function('宽', '高', `return ${value}`))(宽, 高)}</output>
+            <output id={key}>{高 !== '' && 宽 !== '' && (new Function('宽', '高', `return Number(${value})`))(Number(宽), Number(高))}</output>
           </div>
         ))
       ) : (

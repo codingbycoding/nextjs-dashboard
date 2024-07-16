@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 'use client'
 
 import { useState } from 'react'
@@ -10,8 +12,9 @@ import ColorInput from './ColorInput'
 export default function ColorComp({ idd }:{ idd:number }) {
   const [color, setcolor] = useState({ name: '', note: '', list: { } })
   const [note, setNote] = useState<string>('')
+  const [nextId, setNextId] = useState(10)
 
-  const [inputList, setInputList] = useState([])
+  const [inputList, setInputList] = useState<{ idd:number }[]>([])
 
   const [confirmError, setConfirmError] = useState<string>('')
 
@@ -21,14 +24,15 @@ export default function ColorComp({ idd }:{ idd:number }) {
   }
 
   const onRemoveInput = (inputID : number) => {
-    const newInputList = inputList.filter((input) => input.idd !== inputID)
-    setInputList(newInputList)
-    // console.log('color:', color)
+    setInputList(inputList.filter((input) => input.idd !== inputID))
   }
 
   const handleAddInput = () => {
     console.log('color:', color)
-    setInputList([...inputList, <ColorInput key={inputList.length + 10} idd={inputList.length + 10} onAdd={onAdd} onRemoveInput={onRemoveInput} />])
+    setNextId(nextId + 1)
+    // setInputList([...inputList, <ColorInput key={inputList.length + 10} idd={inputList.length + 10} onAdd={onAdd} onRemoveInput={onRemoveInput} />])
+    setInputList([...inputList, { idd: nextId }])
+    // setAbcList([...abcList, { idd: nextId }])
   }
 
   const refresh = () => {
@@ -111,10 +115,12 @@ export default function ColorComp({ idd }:{ idd:number }) {
           <label htmlFor={`left-${3}`} className="color-left-w">备注</label>
         </div>
 
-        <ColorInput idd={3} leftV="" rightV="" onAdd={onAdd} />
+        <ColorInput idd={3} leftV="" rightV="" onAdd={onAdd} readOnly={false} onRemoveInput={onRemoveInput} />
 
-        {inputList.map((input, index:number) => (
-          <div key={index}>{input}</div>
+        {inputList.map((input) => (
+          <div key={input.idd}>
+            <ColorInput idd={input.idd} leftV="" rightV="" onAdd={onAdd} readOnly={false} onRemoveInput={onRemoveInput} />
+          </div>
         ))}
       </div>
 

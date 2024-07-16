@@ -30,11 +30,13 @@ export const customers : Customer[] = [
     userID: 0,
     name: '大金',
     mobile: 15618953660,
+    encoded_data:'',
   },
   {
     userID: 0,
     name: '二钥',
     mobile: 18521019489,
+    encoded_data:'',
   },
 ]
 
@@ -59,6 +61,7 @@ export const formats : Format[] = [
   },
 ]
 
+/*
 export const orders : Order[] = [
   {
     id: 10000,
@@ -115,3 +118,4 @@ export const orders : Order[] = [
     createTime: new Date('2023-08-05 15:00:01'),
   },
 ]
+*/

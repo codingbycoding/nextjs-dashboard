@@ -22,9 +22,13 @@ export async function getFormats(user_id: number) : Promise<Format[]> {
 
 export async function addFormat(format: Format) : Promise<boolean> {
   console.log('format:', format)
+  const serializedEquation = typeof format.equation === 'string'
+    ? format.equation
+    : JSON.stringify(format.equation)
+
   await sql`
         INSERT INTO formats (user_id, name, equation, create_time)
-        VALUES (${format.userID}, ${format.name}, ${format.equation}, now());
+        VALUES (${format.userID}, ${format.name}, ${serializedEquation}, now());
       `
   return true
 }

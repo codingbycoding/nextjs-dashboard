@@ -5,6 +5,13 @@ import axios from 'axios'
 
 import { Customer } from '@/models/models'
 
+/*
+type KV = {
+  k: string;
+  v: string;
+}
+*/
+
 const CustomerEntryVar = ({ customer } : { customer: Customer }) => {
   const printTable = (e: { preventDefault: () => void }) => {
     e.preventDefault()
@@ -49,31 +56,28 @@ const CustomerEntryVar = ({ customer } : { customer: Customer }) => {
         <thead>
           <tr>
             <th>日期</th>
-            <th>类型名称</th>
-            {
-    Object.entries(customer.kvs).map(([key]) => (
-      <th key={key}>
-        {' '}
-        {key}
-        {' '}
-      </th>
-    ))
-        }
+            <th>客户名称</th>
+            {customer && customer.kvs && Object.entries(customer.kvs).map(([key]) => (
+              <th key={key}>
+                {' '}
+                {key}
+                {' '}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{ customerDateTime(customer.createTime) }</td>
             <td>{ customer.name }</td>
-            {
-    Object.entries(customer.kvs).map(([key, value]) => (
-      <th key={key}>
-        {' '}
-        {value}
-        {' '}
-      </th>
-    ))
-        }
+            { customer && customer.kvs
+                && Object.entries(customer.kvs).map(([key, value]) => (
+                  <th key={key}>
+                    {' '}
+                    {value}
+                    {' '}
+                  </th>
+                ))}
           </tr>
         </tbody>
       </table>

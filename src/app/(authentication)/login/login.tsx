@@ -4,8 +4,7 @@ import {
   Alert, Button, Col, Form, FormControl, InputGroup, Row,
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faUser } from '@fortawesome/free-regular-svg-icons'
-import { faUser, faLock, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
 

@@ -16,7 +16,7 @@ const FormatsByDB = ({ userID } : { userID: number }) => {
 
           const newFormats = res.data.formats.map((format: Format) => {
             try {
-              format.equation = JSON.parse(format.equation)
+              format.equation = JSON.parse(format.equation as string)
               return format
             } catch (err) {
               console.error('Error parsing equation:', err)

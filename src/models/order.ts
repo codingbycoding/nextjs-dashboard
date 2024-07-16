@@ -9,8 +9,13 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
       id: row.id,
       userID: row.user_id,
       formatID: row.format_id,
+      customerID: 0,
+      note: '', 
+      width: 0,
+      height: 0,
       formatName: row.format_name,
       equation: row.equation,
+      encoded_equation: '',
       createTime: row.create_time,
       deleteTime: row.delete_time,
     }))
@@ -22,9 +27,13 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
 }
 
 export async function addOrder(order: Order) : Promise<boolean> {
+  const serializedEquation = typeof order.equation === 'string'
+    ? order.equation
+    : JSON.stringify(order.equation)
+
   await sql`
         INSERT INTO orders (user_id, format_id, format_name, note, width, height, equation, create_time)
-        VALUES (${order.userID}, ${order.formatID}, ${order.formatName}, ${order.note}, ${order.width}, ${order.height}, ${order.equation}, now());
+        VALUES (${order.userID}, ${order.formatID}, ${order.formatName}, ${order.note}, ${order.width}, ${order.height}, ${serializedEquation}, now());
       `
   return true
 }

@@ -38,7 +38,7 @@ export default function CustomerInput({
       style={{
          marginLeft: 10,
       }} />
-      <MinusCircleTwoTone onClick={onRemoveInput} />
+      <MinusCircleTwoTone onClick={() => onRemoveInput(idd)} />
     </div>
   )
 }

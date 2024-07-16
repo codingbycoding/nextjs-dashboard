@@ -36,7 +36,7 @@ export default function FormatInput({
       <input type="text" id={`left-${idd}`} className="format-left-w" value={leftValue} onChange={handleLeftChange} readOnly={readOnly ?? false} />
       <label htmlFor={`right-${idd}`} className="format-equal-w">等于</label>
       <input type="text" id={`right-${idd}`} className="format-right-w" value={rightValue} onChange={handleRightChange} readOnly={readOnly ?? false} />
-      <MinusCircleTwoTone onClick={onRemoveInput} />
+      <MinusCircleTwoTone onClick={() => onRemoveInput(idd)} />
     </div>
   )
 }

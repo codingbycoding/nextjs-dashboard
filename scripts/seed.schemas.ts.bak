@@ -46,6 +46,7 @@ async function seedUsers() {
   }
 }
 
+/*
 async function seedCustomers() {
   try {
     // Create the "customers" table if it doesn't exist
@@ -107,7 +108,7 @@ async function seedFormats() {
     // Insert data into the "formats" table
     const insertedFormats = await Promise.all(
       formats.map(
-        (format : Format) => sql`
+        (format : Format) => await sql`
         INSERT INTO formats (user_id, name, create_time)
         VALUES (${format.userID}, ${format.name}, ${format.createTime})
       `,
@@ -129,6 +130,7 @@ async function seedFormats() {
     throw error
   }
 }
+*/
 
 async function seedGlasses() {
   try {

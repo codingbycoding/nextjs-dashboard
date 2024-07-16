@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 'use client'
 
 import { useState } from 'react'
@@ -9,27 +11,35 @@ import GlassInput from './GlassInput'
 
 export default function GlassComp({ idd }:{ idd:number }) {
   const [glass, setGlass] = useState({ name: '', note: '', list: { } })
-  const [name, setName] = useState<string>('')
   const [note, setNote] = useState<string>('')
+  const [nextId, setNextId] = useState(10)
 
-  const [inputList, setInputList] = useState([])
+  const [inputList, setInputList] = useState<{ idd: number }[]>([])
 
   const [confirmError, setConfirmError] = useState<string>('')
 
   const onAdd = (k:string, v:string) => {
-    // console.log('name:', name, ' value:', val)
     setGlass({ ...glass, list: { ...glass.list, [k]: v } })
   }
 
+  // eslint-disable-next-line no-lone-blocks
+  { /*
   const onRemoveInput = (inputID : number) => {
     const newInputList = inputList.filter((input) => input.idd !== inputID)
     setInputList(newInputList)
     // console.log('glass:', glass)
   }
+  */ }
+
+  const onRemoveInput = (ida: number) => {
+    setInputList(inputList.filter((abc) => abc.idd !== ida))
+  }
 
   const handleAddInput = () => {
     console.log('glass:', glass)
-    setInputList([...inputList, <GlassInput key={inputList.length + 10} idd={inputList.length + 10} onAdd={onAdd} onRemoveInput={onRemoveInput} />])
+    // setInputList([...inputList, <GlassInput key={inputList.length + 10} idd={inputList.length + 10} onAdd={onAdd} onRemoveInput={onRemoveInput} />])
+    setInputList([...inputList, { idd: nextId }])
+    setNextId(nextId + 1)
   }
 
   const refresh = () => {
@@ -51,7 +61,6 @@ export default function GlassComp({ idd }:{ idd:number }) {
       hasError = true
     }
     */
-
     Object.entries(glass.list).map(([key, value]) => {
       console.log(`key:${key} value:${value}`)
       if (key === '' || value === '') {
@@ -112,11 +121,23 @@ export default function GlassComp({ idd }:{ idd:number }) {
           <label htmlFor={`left-${3}`} className="glass-left-w">备注</label>
         </div>
 
-        <GlassInput idd={3} leftV="" rightV="" onAdd={onAdd} />
+        <GlassInput idd={3} leftV="" rightV="" readOnly={false} onAdd={onAdd} onRemoveInput={onRemoveInput} />
 
+        {/* <ABC key={abc.id} id={abc.id} onRemove={handleRemove} />
+        {inputList.map((input) => (
+          <GlassInput key={input.idd} idd={input.idd} onAdd={onAdd} onRemoveInput={onRemoveInput} />
+        ))}
+        */}
+
+        {inputList.map((input) => (
+          <GlassInput key={input.idd} idd={input.idd} leftV="" rightV="" readOnly={false} onAdd={onAdd} onRemoveInput={onRemoveInput} />
+        ))}
+
+        {/*
         {inputList.map((input, index:number) => (
           <div key={index}>{input}</div>
         ))}
+      */}
       </div>
 
       <div className="parent-of-confirm">

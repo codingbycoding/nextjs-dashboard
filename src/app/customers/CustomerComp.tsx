@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 'use client'
 
 import { useState } from 'react'
@@ -11,32 +13,36 @@ import CustomerInput from './CustomerInput'
 export default function CustomerComp({ idd }:{ idd:number }) {
   const [customer, setCustomer] = useState({ name: '', mobile: 0, kvs: { } } as Customer)
   const [note, setName] = useState<string>('')
+  const [nextId, setNextId] = useState(10)
 
-  const [inputList, setInputList] = useState([])
+  const [inputList, setInputList] = useState<{ idd:number }[]>([])
 
   const [confirmError, setConfirmError] = useState<string>('')
 
+  /*
   const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRightValue(event.currentTarget.value)
   }
+  */
 
   const onAdd = (name : string, val:string) => {
     setCustomer({ ...customer, kvs: { ...customer.kvs, [name]: val } })
   }
 
-  const onRemoveInput = (inputID : number) => {
-    const newInputList = inputList.filter((input) => input.idd !== inputID)
-    setInputList(newInputList)
+  const onRemoveInput = (ida : number) => {
+    setInputList(inputList.filter((input) => input.idd !== ida))
   }
 
   const handleAddInput = () => {
     console.log('customer:', customer)
-    setInputList([...inputList, <CustomerInput key={inputList.length + 10} idd={inputList.length + 10} onAdd={onAdd} onRemoveInput={onRemoveInput} />])
+    setNextId(nextId + 1)
+    // setInputList([...inputList, <CustomerInput key={inputList.length + 10} idd={inputList.length + 10} onAdd={onAdd} onRemoveInput={onRemoveInput} />])
+    setInputList([...inputList, { idd: nextId }])
   }
 
   const refresh = () => {
     // eslint-disable-next-line no-restricted-globals
-    // location.reload()
+    location.reload()
   }
 
   const handleAddcustomer = async () => {
@@ -48,12 +54,14 @@ export default function CustomerComp({ idd }:{ idd:number }) {
       hasError = true
     }
 
-    Object.entries(customer.kvs).map(([key, value]) => {
-      console.log(`key:${key} value:${value}`)
-      if (key === '' || value === '') {
-        hasError = true
-      }
-    })
+    if (customer.kvs) {
+      Object.entries(customer.kvs).map(([key, value]) => {
+        console.log(`key:${key} value:${value}`)
+        if (key === '' || value === '') {
+          hasError = true
+        }
+      })
+    }
 
     setConfirmError('')
     if (hasError) {
@@ -110,20 +118,19 @@ export default function CustomerComp({ idd }:{ idd:number }) {
             id={`note-${1}`}
             className="customer-right-w"
             placeholder="王大王天王窗"
-            style={{ display: 'inline' }}
+            style={{ display: 'inline', marginLeft: 10 }}
             onChange={(e) => setName(e.target.value)}
-            style={{
-              marginLeft: 10,
-            }}
           />
         </div>
 
-        <CustomerInput idd={3} leftV="电话" rightV="" onAdd={onAdd} />
-        <CustomerInput idd={4} leftV="住址" rightV="" onAdd={onAdd} />
-        <CustomerInput idd={5} leftV="备注" rightV="" onAdd={onAdd} />
+        <CustomerInput idd={3} leftV="电话" rightV="" onAdd={onAdd} readOnly={false} onRemoveInput={onRemoveInput} />
+        <CustomerInput idd={4} leftV="地址" rightV="" onAdd={onAdd} readOnly={false} onRemoveInput={onRemoveInput} />
+        <CustomerInput idd={5} leftV="备注" rightV="" onAdd={onAdd} readOnly={false} onRemoveInput={onRemoveInput} />
 
-        {inputList.map((input, index:number) => (
-          <div key={index}>{input}</div>
+        {inputList.map((input) => (
+          <div key={input.idd}>
+            <CustomerInput key={input.idd} idd={input.idd} leftV="" rightV="" onAdd={onAdd} readOnly={false} onRemoveInput={onRemoveInput} />
+          </div>
         ))}
       </div>
 

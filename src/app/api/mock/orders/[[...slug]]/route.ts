@@ -14,7 +14,7 @@ function decodeUserID(request : NextRequest) : number {
 
   const user = jsonStr.user as User
 
-  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET)
+  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET as jwt.Secret) as jwt.JwtPayload
   const userID = jwtDecoded?.user_id
 
   console.debug('user:', user)
@@ -35,7 +35,7 @@ export async function GET(request : NextRequest) {
   */
   const user = jsonStr.user as User
 
-  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET)
+  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET as jwt.Secret) as jwt.JwtPayload
   const userID = jwtDecoded?.user_id
 
   console.debug('user:', user)
@@ -53,7 +53,7 @@ export async function POST(request : NextRequest) {
 
   const user = jsonStr.user as User
 
-  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET)
+  const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET as jwt.Secret) as jwt.JwtPayload
   const userID = jwtDecoded?.user_id
 
   console.debug('user:', user)

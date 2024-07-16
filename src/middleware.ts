@@ -1,5 +1,5 @@
-import type { NextRequest } from 'next/server'
-import { NextResponse } from 'next/server'
+// import type { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 type Middleware = (request: NextRequest) => NextResponse
 
@@ -10,7 +10,7 @@ const redirectIfAuthenticated: Middleware = (request) => {
   console.debug('redirectIfAuthenticated authSession:%s', authSession)
 
   if (authSession) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/calculation', request.url))
   }
 
   return NextResponse.next()
@@ -28,7 +28,13 @@ const authenticated: Middleware = (request) => {
     return response
   }
 
-  return NextResponse.next()
+  const response = NextResponse.redirect(new URL('/calculation', request.url))
+  response.cookies.set({
+    name: 'redirect',
+    value: request.url,
+  })
+  return response
+  // return NextResponse.next()
 }
 
 export default function middleware(request: NextRequest) {
@@ -43,7 +49,7 @@ export default function middleware(request: NextRequest) {
   if ([
     '/',
     '/pokemons',
-    '/calculation',
+    // '/calculation',
   ].includes(request.nextUrl.pathname)) {
     return authenticated(request)
   }

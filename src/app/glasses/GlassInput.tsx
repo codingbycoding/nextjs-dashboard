@@ -34,14 +34,22 @@ export default function GlassInput({
       }}
     >
       <input type="text" id={`left-${idd}`} className="glass-left-w" value={leftValue} onChange={handleLeftChange} readOnly={readOnly ?? false} />
-      {/* 
+      {/*
       <label htmlFor={`right-${idd}`} className="glass-equal-w"></label>
       */}
-      <input type="text" id={`right-${idd}`} className="glass-right-w" value={rightValue} onChange={handleRightChange} readOnly={readOnly ?? false}
-      style={{
-         marginLeft: 10,
-      }} />
-      <MinusCircleTwoTone onClick={onRemoveInput} />
+      <input
+        type="text"
+        id={`right-${idd}`}
+        className="glass-right-w"
+        value={rightValue}
+        onChange={handleRightChange}
+        readOnly={readOnly ?? false}
+        style={{
+          marginLeft: 10,
+        }}
+      />
+      {/* <MinusCircleTwoTone onClick={onRemoveInput(idd)} /> */}
+      <MinusCircleTwoTone onClick={() => onRemoveInput(idd)} />
     </div>
   )
 }
