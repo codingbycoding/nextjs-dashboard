@@ -13,12 +13,14 @@ export async function getUserByName(name: string) {
 
     return undefined
   } catch (error) {
-    console.error('Error seeding users:', error)
+    console.error('getUserByName error:', error)
     throw error
   }
 }
 
 export async function getUserByMobile(mobile: number) : Promise<User | undefined> {
+  console.log('Environment Variables:', process.env)
+
   try {
     const users = await sql`SELECT * from users WHERE mobile = ${mobile}`
     if (Array.isArray(users) && users.length === 1) {
@@ -27,7 +29,7 @@ export async function getUserByMobile(mobile: number) : Promise<User | undefined
 
     return undefined
   } catch (error) {
-    console.error('Error seeding users:', error)
+    console.error('getUserByMobile error:', error)
     throw error
   }
 }
