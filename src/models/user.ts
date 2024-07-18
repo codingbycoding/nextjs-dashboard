@@ -34,7 +34,7 @@ export async function getUserByMobile(mobile: number) : Promise<User | undefined
   }
 }
 
-export async function addUser(inUser: User) : Promise<boolean> {
+export async function addUser(inUser: User) : Promise<number> {
   const user = inUser
   if (user.name === undefined || user.name === '') {
     user.name = '3660'
@@ -43,16 +43,20 @@ export async function addUser(inUser: User) : Promise<boolean> {
   const oldUser = await getUserByMobile(user.mobile)
   if (oldUser?.mobile === user.mobile) {
     console.error('user with mobile exist:', user.mobile)
-    return false
+    return 0
   }
 
   const hashedPassword = await bcrypt.hash(user.password, 10)
-  await sql`
+  const results = await sql`
         INSERT INTO users (name, mobile, password, create_time)
         VALUES (${user.name}, ${user.mobile}, ${hashedPassword}, now())
-        ON CONFLICT (mobile) DO NOTHING;
-      `
-  return true
+        ON CONFLICT (mobile) DO NOTHING
+        RETURNING id`
+  console.debug('addUser:', results)
+  if (Array.isArray(results) && results.length === 1) {
+    return results[0].id
+  }
+  return 0
 }
 
 export async function comparePassword(password: string, user: User | undefined) {

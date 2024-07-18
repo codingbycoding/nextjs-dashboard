@@ -5,6 +5,8 @@ import { Customer } from '@/models/models'
 const customersTableName = 'wdw_customers'
 
 export async function getCustomers(user_id: number) : Promise<Customer[]> {
+  console.log('getCustomers user_id:', user_id)
+
   try {
     const sqlcustomers = await sql`SELECT * from wdw_customers WHERE user_id = ${user_id} AND delete_time IS NULL order by create_time desc`
     const customers: Customer[] = sqlcustomers.map((row) => ({

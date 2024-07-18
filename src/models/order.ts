@@ -3,6 +3,7 @@ import sql from '@/lib/db'
 import { Order } from '@/models/models'
 
 export async function getOrders(user_id: number) : Promise<Order[]> {
+  console.log('getOrders user_id:', user_id)
   try {
     const sqlOrders = await sql`SELECT * from orders WHERE user_id = ${user_id} AND delete_time IS NULL order by create_time desc`
     const orders: Order[] = sqlOrders.map((row) => ({

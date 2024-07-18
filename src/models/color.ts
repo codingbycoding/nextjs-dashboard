@@ -6,6 +6,7 @@ export async function getColors(user_id: number) : Promise<Color[]> {
   console.log('getColors user_id:', user_id)
   try {
     const sqlColors = await sql`SELECT * from colors WHERE user_id = ${user_id} AND delete_time IS NULL order by create_time desc`
+    console.debug('sqlColors:', sqlColors)
     const colors: Color[] = sqlColors.map((row) => ({
       id: row.id,
       userID: row.user_id,

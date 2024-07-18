@@ -34,11 +34,13 @@ export async function GET(request : NextRequest) {
   console.log('user:', user)
   */
   const user = jsonStr.user as User
+  console.debug('user:', user)
 
   const jwtDecoded = jwt.verify(jsonStr.jwt, process.env.JWT_SECRET as jwt.Secret) as jwt.JwtPayload
+  console.debug('jwtDecoded:', jwtDecoded)
   const userID = jwtDecoded?.user_id
 
-  console.debug('user:', user)
+  console.debug('userID:', userID)
   const formats = await getFormats(userID)
   return Response.json({ formats })
 }

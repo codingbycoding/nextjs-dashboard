@@ -31,6 +31,7 @@ export async function GET(request : NextRequest) {
     return Response.json({ })
   }
 
+  console.debug('authStr:', authStr)
   const jsonStr = authStr.startsWith('j:') ? JSON.parse(authStr.slice(2)) : authStr
 
   /*

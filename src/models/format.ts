@@ -3,8 +3,14 @@ import sql from '@/lib/db'
 import { Format } from '@/models/models'
 
 export async function getFormats(user_id: number) : Promise<Format[]> {
+    console.debug('getFormats, user_id:', user_id)
+    console.debug('getFormats, user_id:', user_id, 'type:', typeof user_id)
+
   try {
     const sqlformats = await sql`SELECT * from formats WHERE user_id = ${user_id} AND delete_time IS NULL order by create_time desc`
+
+    console.debug('getFormats, sqlformats:', sqlformats)
+
     const formats: Format[] = sqlformats.map((row) => ({
       id: row.id,
       userID: row.user_id,

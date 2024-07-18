@@ -144,7 +144,9 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
             colorOpts.push({ value: color.name, label: color.name })
           })
           console.log('colorOptions:', colorOpts)
-          setColorSelectedOpt(newColors[0].name)
+          if (newColors.length > 0) {
+            setColorSelectedOpt(newColors[0].name)
+          }
           // setSelectedColor(newColors[0])
         }
       } catch (err) {
@@ -169,8 +171,10 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
             glassOpts.push({ value: glass.name, label: glass.name })
           })
           console.log('glassOptions:', glassOpts)
-          setGlassSelectedOpt(newGlasses[0].name)
-          setGlassFSelectedOpt(newGlasses[0].name)
+          if (newGlasses.length > 0) {
+            setGlassSelectedOpt(newGlasses[0].name)
+            setGlassFSelectedOpt(newGlasses[0].name)
+          }
         }
       } catch (err) {
         if (err instanceof Error) {
