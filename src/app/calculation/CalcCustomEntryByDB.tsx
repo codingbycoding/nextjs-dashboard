@@ -27,7 +27,7 @@ const CalcCustomEntryByDB = ({ userID } : { userID: number }) => {
 
   return (
     <div className="parent-div-for-orders">
-      {dbOrders.map((order : Order) => (
+      {dbOrders && dbOrders.map((order : Order) => (
         <CalcCustomEntryVar key={order.id} order={order} />
       ))}
     </div>

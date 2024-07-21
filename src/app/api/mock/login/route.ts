@@ -5,7 +5,7 @@ import * as jwt from 'jsonwebtoken'
 async function oddReturn(request : Request) {
   /*
   request.formData().then((data) => {
-    console.log(data)
+    console.debug(data)
     // do something with the formdata sent in the request
   })
   */
@@ -13,7 +13,7 @@ async function oddReturn(request : Request) {
   const data = await request.json()
   const user = await getUserByMobile(data.mobile)
   if (user === undefined && user === null) {
-    console.log('user', user)
+    console.debug('user', user)
     return Response.json({ login: false, error: 'name is not adam' }, { status: 401 })
   }
 

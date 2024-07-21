@@ -3,7 +3,8 @@ import sql from '@/lib/db'
 import { Order } from '@/models/models'
 
 export async function getOrders(user_id: number) : Promise<Order[]> {
-  console.log('getOrders user_id:', user_id)
+  console.debug('getOrders user_id:', user_id)
+
   try {
     const sqlOrders = await sql`SELECT * from orders WHERE user_id = ${user_id} AND delete_time IS NULL order by create_time desc`
     const orders: Order[] = sqlOrders.map((row) => ({
@@ -11,7 +12,7 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
       userID: row.user_id,
       formatID: row.format_id,
       customerID: 0,
-      note: '', 
+      note: '',
       width: 0,
       height: 0,
       formatName: row.format_name,

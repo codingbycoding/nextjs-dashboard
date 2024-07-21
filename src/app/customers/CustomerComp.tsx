@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 'use client'
 
 import { useState } from 'react'
@@ -34,7 +32,7 @@ export default function CustomerComp({ idd }:{ idd:number }) {
   }
 
   const handleAddInput = () => {
-    console.log('customer:', customer)
+    console.debug('customer:', customer)
     setNextId(nextId + 1)
     // setInputList([...inputList, <CustomerInput key={inputList.length + 10} idd={inputList.length + 10} onAdd={onAdd} onRemoveInput={onRemoveInput} />])
     setInputList([...inputList, { idd: nextId }])
@@ -47,7 +45,7 @@ export default function CustomerComp({ idd }:{ idd:number }) {
 
   const handleAddcustomer = async () => {
     customer.name = note
-    console.log('outputs customer:', customer)
+    console.debug('outputs customer:', customer)
 
     let hasError = false
     if (customer.name === '') {
@@ -56,7 +54,7 @@ export default function CustomerComp({ idd }:{ idd:number }) {
 
     if (customer.kvs) {
       Object.entries(customer.kvs).map(([key, value]) => {
-        console.log(`key:${key} value:${value}`)
+        console.debug(`key:${key} value:${value}`)
         if (key === '' || value === '') {
           hasError = true
         }
@@ -78,17 +76,17 @@ export default function CustomerComp({ idd }:{ idd:number }) {
 
       const res = await axios.post('api/mock/customers', newCustomer)
       if (res.status === 200) {
-        console.log('200')
+        console.debug('200')
       }
       refresh()
     } catch (err) {
       if (err instanceof Error) {
         // setError(err.message)
-        console.log('err:', err)
+        console.debug('err:', err)
       }
     } finally {
       // setSubmitting(false)
-      console.log('finally')
+      console.debug('finally')
     }
   }
 

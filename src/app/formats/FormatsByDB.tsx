@@ -12,7 +12,7 @@ const FormatsByDB = ({ userID } : { userID: number }) => {
       try {
         const res = await axios.get('/api/mock/formats')
         if (res.status === 200) {
-          console.log('dbFormats:', res.data.formats)
+          console.debug('dbFormats:', res.data.formats)
 
           const newFormats = res.data.formats.map((format: Format) => {
             try {
@@ -25,7 +25,7 @@ const FormatsByDB = ({ userID } : { userID: number }) => {
           })
 
           // setdbFormats(res.data.formats)
-          console.log('newFormats:', newFormats)
+          console.debug('newFormats:', newFormats)
           setdbFormats(newFormats)
         }
       } catch (err) {
@@ -37,7 +37,7 @@ const FormatsByDB = ({ userID } : { userID: number }) => {
 
     getformats()
 
-    console.log('dbFormats:', dbFormats)
+    console.debug('dbFormats:', dbFormats)
   }, [userID]) // Depend on userID to refetch when it changes
 
   return (

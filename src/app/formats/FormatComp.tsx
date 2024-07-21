@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 'use client'
 
 import { useState } from 'react'
@@ -19,17 +17,15 @@ export default function FormatComp({ idd }:{ idd:number }) {
   const [confirmError, setConfirmError] = useState<string>('')
 
   const onAdd = (name : string, val:string) => {
-    // console.log('name:', name, ' value:', val)
     setFormat({ ...format, equation: { ...format.equation, [name]: val } })
   }
 
   const onRemoveInput = (inputID : number) => {
     setInputList(inputList.filter((input) => input.idd !== inputID))
-    // console.log('format:', format)
   }
 
   const handleAddInput = () => {
-    console.log('format:', format)
+    console.debug('format:', format)
 
     setNextId(nextId + 1)
     setInputList([...inputList, { idd: nextId }])
@@ -42,7 +38,7 @@ export default function FormatComp({ idd }:{ idd:number }) {
 
   const handleAddformat = async () => {
     format.name = note
-    console.log('outputs format:', format)
+    console.debug('outputs format:', format)
 
     let hasError = false
     if (format.name === '') {
@@ -50,7 +46,7 @@ export default function FormatComp({ idd }:{ idd:number }) {
     }
 
     Object.entries(format.equation).map(([key, value]) => {
-      console.log(`key:${key} value:${value}`)
+      console.debug(`key:${key} value:${value}`)
       if (key === '' || value === '') {
         hasError = true
       }
@@ -70,17 +66,17 @@ export default function FormatComp({ idd }:{ idd:number }) {
 
       const res = await axios.post('api/mock/formats', newFormat)
       if (res.status === 200) {
-        console.log('200')
+        console.debug('200')
       }
       refresh()
     } catch (err) {
       if (err instanceof Error) {
         // setError(err.message)
-        console.log('err:', err)
+        console.debug('err:', err)
       }
     } finally {
       // setSubmitting(false)
-      console.log('finally')
+      console.debug('finally')
     }
   }
 

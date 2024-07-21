@@ -5,7 +5,7 @@ import { Customer } from '@/models/models'
 const customersTableName = 'wdw_customers'
 
 export async function getCustomers(user_id: number) : Promise<Customer[]> {
-  console.log('getCustomers user_id:', user_id)
+  console.debug('getCustomers user_id:', user_id)
 
   try {
     const sqlcustomers = await sql`SELECT * from wdw_customers WHERE user_id = ${user_id} AND delete_time IS NULL order by create_time desc`
@@ -26,7 +26,7 @@ export async function getCustomers(user_id: number) : Promise<Customer[]> {
 }
 
 export async function addCustomer(customer: Customer) : Promise<boolean> {
-  console.log('addCustomer customer:', customer)
+  console.debug('addCustomer customer:', customer)
   await sql`
         INSERT INTO wdw_customers (user_id, name, mobile, encoded_data, create_time)
         VALUES (${customer.userID}, ${customer.name}, ${customer.mobile}, ${customer.encoded_data}, now());

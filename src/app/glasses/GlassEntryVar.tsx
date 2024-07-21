@@ -7,7 +7,7 @@ import axios from 'axios'
 const GlassEntryVar = ({ glass } : { glass: Glass }) => {
   const printTable = (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    console.log('printTable glass_id:', glass.id)
+    console.debug('printTable glass_id:', glass.id)
     const printContents = document?.getElementById(`print-area-${glass.id}`)?.innerHTML
     const originalContents = document.body.innerHTML
     document.body.innerHTML = printContents ?? ''
@@ -17,11 +17,11 @@ const GlassEntryVar = ({ glass } : { glass: Glass }) => {
   }
 
   const deleteGlass = async () => {
-    console.log('glass_id:', glass.id)
+    console.debug('glass_id:', glass.id)
     try {
       const res = await axios.delete(`api/mock/glasses/${glass.id}`)
       if (res.status === 200) {
-        console.log('status:', 200)
+        console.debug('status:', 200)
       }
 
       // eslint-disable-next-line no-restricted-globals
@@ -29,11 +29,11 @@ const GlassEntryVar = ({ glass } : { glass: Glass }) => {
     } catch (err) {
       if (err instanceof Error) {
         // setError(err.message)
-        console.log('err:', err)
+        console.debug('err:', err)
       }
     } finally {
       // setSubmitting(false)
-      console.log('finally:')
+      console.debug('finally:')
     }
   }
 

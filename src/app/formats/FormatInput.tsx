@@ -5,7 +5,6 @@ import { MinusCircleTwoTone } from '@ant-design/icons'
 
 export default function FormatInput({
   idd, readOnly, leftV, rightV, onAdd, onRemoveInput,
-// eslint-disable-next-line max-len
 }:{ idd:number; readOnly:boolean | undefined; leftV: string | undefined; rightV: string | undefined;
   onAdd : (name: string, value: string) => void;
   onRemoveInput :(idd:number) => void;
@@ -23,7 +22,7 @@ export default function FormatInput({
       onAdd(leftValue, event.currentTarget.value)
     }
 
-    console.log(`leftValue:${leftValue}, rightValue:${rightValue}, event.currentTarget.value:${event.currentTarget.value}`)
+    console.debug(`leftValue:${leftValue}, rightValue:${rightValue}, event.currentTarget.value:${event.currentTarget.value}`)
   }
 
   return (

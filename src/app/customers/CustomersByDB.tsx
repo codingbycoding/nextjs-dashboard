@@ -12,7 +12,7 @@ const CustomersByDB = ({ userID } : { userID: number }) => {
       try {
         const res = await axios.get('/api/mock/customers')
         if (res.status === 200) {
-          console.log('res.data.customers:', res.data.customers)
+          console.debug('res.data.customers:', res.data.customers)
 
           const newCustomers = res.data.customers.map((customer: Customer) => {
             try {
@@ -25,7 +25,7 @@ const CustomersByDB = ({ userID } : { userID: number }) => {
           })
 
           // setdbCustomers(res.data.customers)
-          console.log('newCustomers:', newCustomers)
+          console.debug('newCustomers:', newCustomers)
           setdbCustomers(newCustomers)
         }
       } catch (err) {
@@ -37,7 +37,7 @@ const CustomersByDB = ({ userID } : { userID: number }) => {
 
     getcustomers()
 
-    console.log('dbCustomers:', dbCustomers)
+    console.debug('dbCustomers:', dbCustomers)
   }, [userID]) // Depend on userID to refetch when it changes
 
   return (

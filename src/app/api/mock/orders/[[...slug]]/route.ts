@@ -31,7 +31,7 @@ export async function GET(request : NextRequest) {
 
   /*
   const user = await request.json() as User
-  console.log('user:', user)
+  console.debug('user:', user)
   */
   const user = jsonStr.user as User
 
@@ -60,7 +60,7 @@ export async function POST(request : NextRequest) {
 
   const order = await request.json() as Order
   if (order === undefined && order === null) {
-    console.log('order', order)
+    console.debug('order', order)
     return Response.json({ error: 'order is wrong' }, { status: 401 })
   }
 
@@ -70,7 +70,7 @@ export async function POST(request : NextRequest) {
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: { slug: string } }) {
-  console.log('delete')
+  console.debug('delete')
 
   const userID = decodeUserID(request)
   const orderID = parseInt(params.slug, 10)

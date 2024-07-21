@@ -3,7 +3,8 @@ import sql from '@/lib/db'
 import { Glass } from '@/models/models'
 
 export async function getGlasses(user_id: number) : Promise<Glass[]> {
-  console.log('getGlasses user_id:', user_id)
+  console.debug('getGlasses user_id:', user_id)
+
   try {
     const sqlGlasses = await sql`SELECT * from glasses WHERE user_id = ${user_id} AND delete_time IS NULL order by create_time desc`
     const glasses: Glass[] = sqlGlasses.map((row) => ({
@@ -22,7 +23,7 @@ export async function getGlasses(user_id: number) : Promise<Glass[]> {
 }
 
 export async function addGlass(glass: Glass) : Promise<boolean> {
-  console.log('glass:', glass)
+  console.debug('glass:', glass)
   await sql`
         INSERT INTO glasses (user_id, name, note, create_time)
         VALUES (${glass.userID}, ${glass.name}, ${glass.note}, now());
@@ -66,7 +67,7 @@ export async function addGlasses(glasses: Glass[]): Promise<boolean> {
 
 /*
 export async function addGlasses(glasses: Glass[]): Promise<boolean> {
-  console.log('glasses:', glasses)
+  console.debug('glasses:', glasses)
   const insertStatements = glasses.map(
     (g) => `
     SELECT ${g.userID}, '${g.name}', '${g.note}', now()
@@ -84,7 +85,7 @@ export async function addGlasses(glasses: Glass[]): Promise<boolean> {
 
 /*
 export async function addGlasses(glass: Glass[]) : Promise<boolean> {
-  console.log('glass:', glass)
+  console.debug('glass:', glass)
   await sql`
         INSERT INTO glasses (user_id, name, note, create_time)
         VALUES (${glass.userID}, ${glass.name}, ${glass.note}, now());

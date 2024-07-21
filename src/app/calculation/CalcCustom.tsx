@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-implied-eval */
-/* eslint-disable max-len */
 
 'use client'
 

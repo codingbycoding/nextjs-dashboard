@@ -2,7 +2,6 @@
 
 import { Divider } from 'antd'
 
-// import GlassEntry from './GlassEntry'
 import GlassComp from './GlassComp'
 import GlassEntryByDB from './GlassesByDB'
 

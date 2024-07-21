@@ -1,11 +1,10 @@
-import sql from '@/lib/db'
-
 import bcrypt from 'bcrypt'
+
 import { User } from '@/models/models'
+import sql from '@/lib/db'
 
 export async function getUserByName(name: string) {
   try {
-    // const users = await sql`SELECT * from users WHERE name = ${name} or mobile = ${mobile}`
     const users = await sql`SELECT * from users WHERE name = ${name}`
     if (Array.isArray(users) && users.length === 1) {
       return users[0]
@@ -19,8 +18,6 @@ export async function getUserByName(name: string) {
 }
 
 export async function getUserByMobile(mobile: number) : Promise<User | undefined> {
-  console.log('Environment Variables:', process.env)
-
   try {
     const users = await sql`SELECT * from users WHERE mobile = ${mobile}`
     if (Array.isArray(users) && users.length === 1) {
@@ -52,6 +49,7 @@ export async function addUser(inUser: User) : Promise<number> {
         VALUES (${user.name}, ${user.mobile}, ${hashedPassword}, now())
         ON CONFLICT (mobile) DO NOTHING
         RETURNING id`
+
   console.debug('addUser:', results)
   if (Array.isArray(results) && results.length === 1) {
     return results[0].id

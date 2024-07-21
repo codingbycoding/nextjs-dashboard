@@ -5,7 +5,6 @@ import { MinusCircleTwoTone } from '@ant-design/icons'
 
 export default function ColorInput({
   idd, readOnly, leftV, rightV, onAdd, onRemoveInput,
-// eslint-disable-next-line max-len
 }:{ idd:number; readOnly:boolean | undefined; leftV: string | undefined; rightV: string | undefined;
   onAdd : (name: string, value: string) => void;
   onRemoveInput :(idd:number) => void;

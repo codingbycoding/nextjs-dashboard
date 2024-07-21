@@ -12,11 +12,11 @@ const GlassesByDB = ({ userID } : { userID: number }) => {
       try {
         const res = await axios.get('/api/mock/glasses')
         if (res.status === 200) {
-          console.log('res.data.:', res.data)
-          console.log('dbGlasses:', res.data.glasses)
+          console.debug('res.data.:', res.data)
+          console.debug('dbGlasses:', res.data.glasses)
           // setdbGlasses(res.data.glasses)
           const { glasses } = res.data
-          console.log('newGlasses:', glasses)
+          console.debug('newGlasses:', glasses)
           setDbGlasses(glasses)
         }
       } catch (err) {
@@ -28,7 +28,7 @@ const GlassesByDB = ({ userID } : { userID: number }) => {
 
     getGlasses()
 
-    console.log('dbGlasses:', dbGlasses)
+    console.debug('dbGlasses:', dbGlasses)
   }, [userID]) // Depend on userID to refetch when it changes
 
   return (

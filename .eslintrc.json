@@ -61,6 +61,7 @@
         ]
       }
     ],
+    "max-len": "off",
     "quotes": [
       2,
       "single"
