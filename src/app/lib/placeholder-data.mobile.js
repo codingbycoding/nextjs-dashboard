@@ -1,15 +1,12 @@
-"use strict";
 // This file contains placeholder data that you'll be replacing with real data in the Data Fetching chapter:
 // https://nextjs.org/learn/dashboard-app/fetching-data
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.orders = exports.formats = exports.users = void 0;
-var ids = [
+const ids = [
     10000,
     10001,
     10002,
     10003,
 ];
-exports.users = [
+export const users = [
     {
         name: '大金',
         mobile: 15618953660,
@@ -21,24 +18,75 @@ exports.users = [
         password: '019489',
     },
 ];
-exports.formats = [
+export const customers = [
+    {
+        userID: 0,
+        name: '大金',
+        mobile: 15618953660,
+        encoded_data: '',
+    },
+    {
+        userID: 0,
+        name: '二钥',
+        mobile: 18521019489,
+        encoded_data: '',
+    },
+];
+export const formats = [
     {
         name: '打85移门料子',
         userID: ids[0],
+        equation: '',
         createTime: new Date('2023-11-14 12:00:01'),
     },
     {
         name: '极窄双扇1635',
         userID: ids[0],
+        equation: '',
         createTime: new Date('2024-01-14 12:00:01'),
     },
     {
         name: '极窄三联动1635(不锈钢下轨)',
         userID: ids[0],
+        equation: '',
         createTime: new Date('2024-02-14 12:00:01'),
     },
 ];
-exports.orders = [
+export const colors = [
+    {
+        name: '白玻',
+        userID: ids[0],
+        createTime: new Date('2023-11-14 12:00:01'),
+        note: '',
+    },
+    {
+        name: '彩玻',
+        userID: ids[0],
+        createTime: new Date('2024-01-14 12:00:01'),
+        note: '',
+    },
+];
+export const glasses = [
+    {
+        name: '白玻',
+        userID: ids[0],
+        createTime: new Date('2023-11-14 12:00:01'),
+        note: '',
+    },
+    {
+        name: '彩玻',
+        userID: ids[0],
+        createTime: new Date('2024-01-14 12:00:01'),
+        note: '',
+    },
+    {
+        name: '磨砂玻',
+        userID: ids[0],
+        createTime: new Date('2024-02-14 12:00:01'),
+        note: '',
+    },
+];
+export const orders = [
     {
         id: 10000,
         userID: ids[0],
@@ -46,14 +94,11 @@ exports.orders = [
         note: '庙头李四 极窄双扇1635',
         width: 2100,
         height: 1800,
-        shangXiaGui: 2096,
-        shangXiaFang: 699.3,
-        guangQi: 1719,
-        gouQi: 0,
-        bianFeng: 1800,
-        glassWidth: 681.3,
-        glassHeight: 1701,
         createTime: new Date('2024-02-06 12:00:01'),
+        customerID: 0,
+        formatName: '',
+        equation: '',
+        encoded_equation: '',
     },
     {
         id: 10001,
@@ -62,14 +107,11 @@ exports.orders = [
         note: '双勾南王五 极窄双扇1635',
         width: 2100,
         height: 1800,
-        shangXiaGui: 2096,
-        shangXiaFang: 699.3,
-        guangQi: 1719,
-        gouQi: 0,
-        bianFeng: 1800,
-        glassWidth: 681.3,
-        glassHeight: 1701,
         createTime: new Date('2024-01-14 14:00:01'),
+        customerID: 0,
+        formatName: '',
+        equation: '',
+        encoded_equation: '',
     },
     {
         id: 10002,
@@ -78,13 +120,10 @@ exports.orders = [
         note: '河东张三 极窄双扇1635',
         width: 2100,
         height: 1800,
-        shangXiaGui: 2096,
-        shangXiaFang: 699.3,
-        guangQi: 1719,
-        gouQi: 0,
-        bianFeng: 1800,
-        glassWidth: 681.3,
-        glassHeight: 1701,
         createTime: new Date('2023-08-05 15:00:01'),
+        customerID: 0,
+        formatName: '',
+        equation: '',
+        encoded_equation: '',
     },
 ];

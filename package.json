@@ -7,7 +7,7 @@
     "seed.postgres": "node -r dotenv/config ./scripts/seed.postgres.mjs",
     "seed.schemas": "ts-node -r dotenv/config ./scripts/seed.schemas.ts",
     "dev": "next dev",
-    "prebuild": "ttsc --project tsconfig.build.json",
+    "prebuild": "tsc --project tsconfig.build.json",
     "build": "NODE_OPTIONS='--trace-deprecation --trace-warnings' next build",
     "start": "next start",
     "lint": "next lint"

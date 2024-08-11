@@ -7,7 +7,7 @@ import axios from 'axios'
 const FormatEntryVar = ({ format } : { format: Format }) => {
   const printTable = (e: { preventDefault: () => void }) => {
     e.preventDefault()
-    console.log('printTable format_id:', format.id)
+    console.debug('printTable format_id:', format.id)
     const printContents = document?.getElementById(`print-area-${format.id}`)?.innerHTML
     const originalContents = document.body.innerHTML
     document.body.innerHTML = printContents ?? ''
@@ -17,11 +17,11 @@ const FormatEntryVar = ({ format } : { format: Format }) => {
   }
 
   const deleteFormat = async () => {
-    console.log('format_id:', format.id)
+    console.debug('format_id:', format.id)
     try {
       const res = await axios.delete(`api/mock/formats/${format.id}`)
       if (res.status === 200) {
-        console.log('status:', 200)
+        console.debug('status:', 200)
       }
 
       // eslint-disable-next-line no-restricted-globals
@@ -29,11 +29,11 @@ const FormatEntryVar = ({ format } : { format: Format }) => {
     } catch (err) {
       if (err instanceof Error) {
         // setError(err.message)
-        console.log('err:', err)
+        console.debug('err:', err)
       }
     } finally {
       // setSubmitting(false)
-      console.log('finally:')
+      console.debug('finally:')
     }
   }
 

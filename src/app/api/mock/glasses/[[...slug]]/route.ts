@@ -71,6 +71,8 @@ export async function POST(request : NextRequest) {
 
   const list = JSON.parse(glass.list ?? '')
 
+  console.log('list', list)
+
   /*
   glass.list
     && Object.entries(list).map(([key, value]) => {

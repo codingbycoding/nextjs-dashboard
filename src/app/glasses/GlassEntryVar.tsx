@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from 'antd'
+import { Button, Checkbox } from 'antd'
 import { Glass } from '@/models/models'
 import axios from 'axios'
 

@@ -2,6 +2,33 @@ import sql from '@/lib/db'
 
 import { Order } from '@/models/models'
 
+export async function getOrdersByStatus(user_id: number, status: number) : Promise<Order[]> {
+
+  try {
+    const sqlOrders = await sql`SELECT * from orders WHERE user_id = ${user_id} AND status = ${status} AND delete_time IS NULL order by create_time desc`
+    const orders: Order[] = sqlOrders.map((row) => ({
+      id: row.id,
+      userID: row.user_id,
+      formatID: row.format_id,
+      customerID: 0,
+      note: '',
+      width: 0,
+      height: 0,
+      status: row.status,
+      formatName: row.format_name,
+      equation: row.equation,
+      encoded_equation: '',
+      createTime: row.create_time,
+      deleteTime: row.delete_time,
+    }))
+    console.debug('getOrders user_id:', user_id, ' status:', status, ' orders:', orders)
+    return orders
+  } catch (error) {
+    console.error('Error getOrders:', error)
+    throw error
+  }
+}
+
 export async function getOrders(user_id: number) : Promise<Order[]> {
   console.debug('getOrders user_id:', user_id)
 
@@ -15,6 +42,7 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
       note: '',
       width: 0,
       height: 0,
+      status: row.status,
       formatName: row.format_name,
       equation: row.equation,
       encoded_equation: '',
@@ -26,6 +54,14 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
     console.error('Error getOrders:', error)
     throw error
   }
+}
+
+export async function updateOrderStatus(userID: number, orderID: number, status: number) : Promise<boolean> {
+  console.log('userID:', userID, ' orderID:', orderID, ' status:', status)
+  await sql`
+        UPDATE orders SET status = ${status}  WHERE user_id = ${userID} AND id = ${orderID};
+      `
+  return true
 }
 
 export async function addOrder(order: Order) : Promise<boolean> {

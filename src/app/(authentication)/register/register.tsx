@@ -26,6 +26,7 @@ export default function Register() {
     const redirect = getCookie('redirect')
     if (redirect) {
       deleteCookie('redirect')
+      console.debug('redirect.toString():', redirect.toString())
       return redirect.toString()
     }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 export type User = {
   id?: number;
   name: string;
@@ -47,6 +48,11 @@ export type Format = {
   deleteTime?: Date;
 }
 
+// order Status
+const Depositing = 0
+const Printing = 1
+const Finishing = 2
+
 export type Order = {
   id?: number;
   userID: number;
@@ -56,6 +62,7 @@ export type Order = {
   note: string;
   width: number;
   height: number;
+  status: number;
   equation: object[] | string;
   encoded_equation: string;
   createTime: Date;

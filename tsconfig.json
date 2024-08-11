@@ -36,7 +36,7 @@
     ".next/types/**/*.ts",
     "next.config.js", 
     "scripts/seed.schemas.mts"  
-, "src/app/colors/ColorInput.tsx", "src/app/(dashboard)/page copy.tsx.bak", "scripts/seed.schemas.ts.bak", "src/app/colors/ColorInput.tsx.bakk"  ],
+, "src/app/colors/ColorInput.tsx", "src/app/(dashboard)/page copy.tsx.bak", "scripts/seed.schemas.ts"],
   "exclude": [
     "node_modules"
   ]

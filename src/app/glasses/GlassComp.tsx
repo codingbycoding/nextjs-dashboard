@@ -83,7 +83,7 @@ export default function GlassComp({ idd }:{ idd:number }) {
       if (res.status === 200) {
         console.log('200')
       }
-      refresh()
+      //refresh()
     } catch (err) {
       if (err instanceof Error) {
         // setError(err.message)
@@ -119,7 +119,7 @@ export default function GlassComp({ idd }:{ idd:number }) {
           <label htmlFor={`left-${3}`} className="glass-left-w">备注</label>
         </div>
 
-        <GlassInput idd={3} leftV="" rightV="" readOnly={false} onAdd={onAdd} onRemoveInput={onRemoveInput} />
+        <GlassInput key={3} idd={3} leftV="" rightV="" readOnly={false} onAdd={onAdd} onRemoveInput={onRemoveInput} />
 
         {/* <ABC key={abc.id} id={abc.id} onRemove={handleRemove} />
         {inputList.map((input) => (

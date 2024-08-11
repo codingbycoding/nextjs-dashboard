@@ -115,7 +115,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     // Use reduce instead of map to avoid creating a new object in each iteration
     const updatedOrder = Object.entries(selectedFormat.equation as object[]).reduce(
       (acc, [key, value]) => {
-        const val = (new Function('宽', '高', `return ${value}`))(宽, 高)
+        const val = (new Function('宽', '高', `return Number(${value})`))(Number(宽), Number(高))
         return { ...acc, equation: [...(acc.equation as object[] || []), { k: key, v: val }] }
       },
       order,
@@ -251,7 +251,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
   }, [userID])
 
   const handleAddOrder = async () => {
-    if (isNaN(parseFloat(宽)) || isNaN(parseFloat(高)) || note === '') {
+    // if (isNaN(parseFloat(宽)) || isNaN(parseFloat(高)) || note === '') {
+    if (isNaN(parseFloat(宽)) || isNaN(parseFloat(高))) {
       console.error('error 宽 and 高 should be numbers')
       setConfirmError('请检查所有输入')
       return

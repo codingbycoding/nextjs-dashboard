@@ -1,4 +1,3 @@
-// import type { NextRequest } from 'next/server'
 import { NextRequest, NextResponse } from 'next/server'
 
 type Middleware = (request: NextRequest) => NextResponse
@@ -8,9 +7,13 @@ const redirectIfAuthenticated: Middleware = (request) => {
   const authSession = request.cookies.get('auth')?.value
 
   console.debug('redirectIfAuthenticated authSession:%s', authSession)
+  const originalUrl = request.nextUrl.protocol + request.headers.get('host') + request.nextUrl.pathname
 
   if (authSession) {
-    return NextResponse.redirect(new URL('/calculation', request.url))
+    // return NextResponse.redirect(new URL('/calculation', request.url))
+    const url = new URL('/calculation', originalUrl)
+    return NextResponse.redirect(url)
+    // return NextResponse.redirect(new URL('/calculation', originalUrl))
   }
 
   return NextResponse.next()
@@ -19,19 +22,24 @@ const redirectIfAuthenticated: Middleware = (request) => {
 const authenticated: Middleware = (request) => {
   const authSession = request.cookies.get('auth')?.value
 
+  const originalUrl = request.nextUrl.protocol + request.headers.get('host') + request.nextUrl.pathname
+
   if (!authSession) {
-    const response = NextResponse.redirect(new URL('/login', request.url))
+    const url = new URL('/calculation', originalUrl)
+    const response = NextResponse.redirect(url)
+    // const response = NextResponse.redirect(new URL('/login', originalUrl))
     response.cookies.set({
       name: 'redirect',
-      value: request.url,
+      value: url.toString(),
     })
     return response
   }
 
-  const response = NextResponse.redirect(new URL('/calculation', request.url))
+  const url = new URL('/calculation', originalUrl)
+  const response = NextResponse.redirect(url)
   response.cookies.set({
     name: 'redirect',
-    value: request.url,
+    value: url.toString(),
   })
   return response
   // return NextResponse.next()

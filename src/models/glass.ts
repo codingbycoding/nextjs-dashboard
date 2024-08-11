@@ -23,7 +23,7 @@ export async function getGlasses(user_id: number) : Promise<Glass[]> {
 }
 
 export async function addGlass(glass: Glass) : Promise<boolean> {
-  console.debug('glass:', glass)
+  console.log('glass:', glass)
   await sql`
         INSERT INTO glasses (user_id, name, note, create_time)
         VALUES (${glass.userID}, ${glass.name}, ${glass.note}, now());

@@ -1,8 +1,12 @@
 import bcrypt from 'bcrypt'
 
 import { sql } from './db'
-import { users, formats, glasses, orders, customers } from '../src/app/lib/placeholder-data.mobile'
-import { User, Format, Glass, Order, Customer } from '../src/models/models'
+import {
+  users, colors, formats, glasses, orders, customers,
+} from '../src/app/lib/placeholder-data.mobile'
+import {
+  User, Color, Format, Glass, Order, Customer,
+} from '../src/models/models'
 
 async function seedUsers() {
   try {
@@ -51,6 +55,7 @@ async function seedCustomers() {
     id BIGSERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
+    note VARCHAR(255) NOT NULL,
     mobile NUMERIC(11) NOT NULL,
     encoded_data VARCHAR(1024) NOT NULL,
     create_time TIMESTAMP NOT NULL,
@@ -64,8 +69,7 @@ async function seedCustomers() {
       customers.map(async (customer : Customer) => sql`
         INSERT INTO customers (user_id, name, create_time)
         VALUES (${customer.userID}, ${customer.name}, now()})
-      `,
-      ),
+      `),
     )
 
     console.log(`Seeded ${insertedCustomers.length} customers`)
@@ -92,6 +96,7 @@ async function seedFormats() {
     user_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     data VARCHAR(1024) NULL,
+    equation VARCHAR(1024) NULL,
     create_time TIMESTAMP NOT NULL,
     delete_time TIMESTAMP
   )
@@ -100,11 +105,10 @@ async function seedFormats() {
     console.log('Created "formats" table')
 
     const insertedFormats = await Promise.all(
-      formats.map(async (format : Format) => await sql`
+      formats.map(async (format : Format) => sql`
         INSERT INTO formats (user_id, name, create_time)
         VALUES (${format.userID}, ${format.name}, now())
-      `,
-      ),
+      `),
     )
 
     console.log(`Seeded ${insertedFormats.length} formats`)
@@ -119,6 +123,44 @@ async function seedFormats() {
     }
   } catch (error) {
     console.error('Error seeding formats:', error)
+    throw error
+  }
+}
+
+async function seedColors() {
+  try {
+    const createTable = await sql`
+    CREATE TABLE IF NOT EXISTS colors (
+    id BIGSERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    note VARCHAR(255) NULL,
+    create_time TIMESTAMP NOT NULL,
+    delete_time TIMESTAMP
+  )
+`
+
+    console.log('Created "colors" table')
+
+    const insertedColors = await Promise.all(
+      colors.map(async (color : Color) => sql`
+        INSERT INTO colors (user_id, name, note, create_time)
+        VALUES (${color.userID}, ${color.name}, ${color.note}, now())
+      `),
+    )
+
+    console.log(`Seeded ${insertedColors.length} colors`)
+
+    // -- Alter the sequence to start from 10000
+    const alterTable = await sql`ALTER SEQUENCE colors_id_seq RESTART WITH 10000`
+
+    return {
+      createTable,
+      alterTable,
+      colors: insertedColors,
+    }
+  } catch (error) {
+    console.error('Error seeding colors:', error)
     throw error
   }
 }
@@ -142,8 +184,7 @@ async function seedGlasses() {
       glasses.map(async (glass : Glass) => sql`
         INSERT INTO glasses (user_id, name, note, create_time)
         VALUES (${glass.userID}, ${glass.name}, ${glass.note}, now())
-      `,
-      ),
+      `),
     )
 
     console.log(`Seeded ${insertedGlasses.length} glasses`)
@@ -169,6 +210,7 @@ async function seedOrders() {
     id BIGSERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     format_id BIGINT NOT NULL,
+    format_name VARCHAR(255) NOT NULL,
 
     note VARCHAR(255) NOT NULL,
     width NUMERIC(5, 1) NOT NULL,
@@ -188,8 +230,7 @@ async function seedOrders() {
       orders.map(async (order: Order) => sql`
         INSERT INTO orders (user_id, format_id, note, width, height, create_time)
         VALUES (${order.userID}, ${order.formatID}, ${order.note}, ${order.width}, ${order.height}, now())
-      `,
-      ),
+      `),
     )
 
     console.log(`Seeded ${insertedOrders.length} orders`)
@@ -205,15 +246,19 @@ async function seedOrders() {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function main() {
   await seedUsers()
+  await seedColors()
+  await seedGlasses()
   await seedFormats()
   await seedOrders()
-}
+  await seedCustomers()
 
-main().catch((err) => {
-  console.error(
-    'An error occurred while attempting to seed the database:',
-    err,
-  )
-})
+  main().catch((err) => {
+    console.error(
+      'An error occurred while attempting to seed the database:',
+      err,
+    )
+  })
+}

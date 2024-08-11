@@ -2,7 +2,7 @@
 // https://nextjs.org/learn/dashboard-app/fetching-data
 
 import {
-  User, Customer, Glass, Format, Order,
+  User, Customer, Color, Glass, Format, Order,
 } from '../../models/models'
 
 const ids = [
@@ -58,6 +58,21 @@ export const formats : Format[] = [
     userID: ids[0],
     equation: '',
     createTime: new Date('2024-02-14 12:00:01'),
+  },
+]
+
+export const colors : Color[] = [
+  {
+    name: '白玻',
+    userID: ids[0],
+    createTime: new Date('2023-11-14 12:00:01'),
+    note: '',
+  },
+  {
+    name: '彩玻',
+    userID: ids[0],
+    createTime: new Date('2024-01-14 12:00:01'),
+    note: '',
   },
 ]
 
