@@ -1,16 +1,18 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { MinusCircleTwoTone } from '@ant-design/icons'
 
 export default function FormatInput({
   idd, readOnly, leftV, rightV, onAdd, onRemoveInput,
 }:{ idd:number; readOnly:boolean | undefined; leftV: string | undefined; rightV: string | undefined;
-  onAdd : (name: string, value: string) => void;
+  onAdd?:(name: string, value: string) => void | undefined;
   onRemoveInput :(idd:number) => void;
 }) {
   const [leftValue, setLeftValue] = useState(leftV ?? '')
   const [rightValue, setRightValue] = useState(rightV ?? '')
+
+  // onAdd && onAdd(leftValue, rightValue)
 
   const handleLeftChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLeftValue(event.currentTarget.value)
@@ -19,11 +21,20 @@ export default function FormatInput({
   const handleRightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRightValue(event.currentTarget.value)
     if (leftValue !== '' && event.currentTarget.value !== '') {
-      onAdd(leftValue, event.currentTarget.value)
+      // onAdd && onAdd(leftValue, event.currentTarget.value)
+      if (onAdd !== undefined) {
+        onAdd(leftValue, event.currentTarget.value)
+        console.debug(`leftValue:${leftValue}, rightValue:${rightValue}, event.currentTarget.value:${event.currentTarget.value}`)
+      }
     }
-
-    console.debug(`leftValue:${leftValue}, rightValue:${rightValue}, event.currentTarget.value:${event.currentTarget.value}`)
   }
+
+  useEffect(() => {
+    if (onAdd !== undefined) {
+      console.log('onAdd leftValue:', leftValue, ' rightValue:', rightValue)
+      onAdd(leftValue, rightValue)
+    }
+  }, [idd])
 
   return (
     <div

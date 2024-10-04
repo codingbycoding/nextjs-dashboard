@@ -3,17 +3,18 @@ import sql from '@/lib/db'
 import { Order } from '@/models/models'
 
 export async function getOrdersByStatus(user_id: number, status: number) : Promise<Order[]> {
-
   try {
     const sqlOrders = await sql`SELECT * from orders WHERE user_id = ${user_id} AND status = ${status} AND delete_time IS NULL order by create_time desc`
     const orders: Order[] = sqlOrders.map((row) => ({
       id: row.id,
       userID: row.user_id,
       formatID: row.format_id,
-      customerID: 0,
-      note: '',
-      width: 0,
-      height: 0,
+      customerID: row.customerID,
+      count: row.count,
+      note: row.note,
+      width: row.width,
+      height: row.height,
+      totalPrice: row.total_price,
       status: row.status,
       formatName: row.format_name,
       equation: row.equation,
@@ -38,10 +39,12 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
       id: row.id,
       userID: row.user_id,
       formatID: row.format_id,
-      customerID: 0,
-      note: '',
-      width: 0,
-      height: 0,
+      customerID: row.customerID,
+      count: row.count,
+      note: row.note,
+      width: row.width,
+      height: row.height,
+      totalPrice: row.total_price,
       status: row.status,
       formatName: row.format_name,
       equation: row.equation,
@@ -56,10 +59,10 @@ export async function getOrders(user_id: number) : Promise<Order[]> {
   }
 }
 
-export async function updateOrderStatus(userID: number, orderID: number, status: number) : Promise<boolean> {
+export async function updateOrderStatus(userID: number, orderID: number, status: number, count: number, totalPrice: number) : Promise<boolean> {
   console.log('userID:', userID, ' orderID:', orderID, ' status:', status)
   await sql`
-        UPDATE orders SET status = ${status}  WHERE user_id = ${userID} AND id = ${orderID};
+        UPDATE orders SET status = ${status}, count = ${count}, total_price = ${totalPrice}  WHERE user_id = ${userID} AND id = ${orderID};
       `
   return true
 }
@@ -70,8 +73,8 @@ export async function addOrder(order: Order) : Promise<boolean> {
     : JSON.stringify(order.equation)
 
   await sql`
-        INSERT INTO orders (user_id, format_id, format_name, note, width, height, equation, create_time)
-        VALUES (${order.userID}, ${order.formatID}, ${order.formatName}, ${order.note}, ${order.width}, ${order.height}, ${serializedEquation}, now());
+        INSERT INTO orders (user_id, format_id, format_name, note, count, width, height, equation, create_time)
+        VALUES (${order.userID}, ${order.formatID}, ${order.formatName}, ${order.note}, ${order.count}, ${order.width}, ${order.height}, ${serializedEquation}, now());
       `
   return true
 }

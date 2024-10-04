@@ -83,7 +83,7 @@ export default function GlassComp({ idd }:{ idd:number }) {
       if (res.status === 200) {
         console.log('200')
       }
-      //refresh()
+      refresh()
     } catch (err) {
       if (err instanceof Error) {
         // setError(err.message)

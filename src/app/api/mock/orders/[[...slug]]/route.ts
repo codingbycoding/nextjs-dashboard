@@ -1,7 +1,9 @@
 import { NextRequest } from 'next/server'
 import * as jwt from 'jsonwebtoken'
 
-import { getOrders, getOrdersByStatus, addOrder, deleteOrder, updateOrderStatus } from '@/models/order'
+import {
+  getOrders, getOrdersByStatus, addOrder, deleteOrder, updateOrderStatus,
+} from '@/models/order'
 import { User, Order } from '@/models/models'
 
 function decodeUserID(request : NextRequest) : number {
@@ -61,7 +63,7 @@ export async function PATCH(request : NextRequest, { params }: { params: { slug:
 
   console.debug('user:', user)
 
-  const statusObj = await request.json() as {status : number}
+  const statusObj = await request.json() as { status : number; count : number, totalPrice : number }
   /*
   if (order === undefined && order === null) {
     console.debug('order', order)
@@ -70,10 +72,9 @@ export async function PATCH(request : NextRequest, { params }: { params: { slug:
   */
 
   const orderID = parseInt(params.slug, 10)
-  const result = await updateOrderStatus(userID, orderID, statusObj.status)
+  const result = await updateOrderStatus(userID, orderID, statusObj.status, statusObj.count, statusObj.totalPrice)
   return Response.json({ result })
 }
-
 
 export async function POST(request : NextRequest) {
   const authStr = request.cookies.get('auth')?.value

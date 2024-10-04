@@ -95,6 +95,7 @@ async function seedFormats() {
     id BIGSERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
+    hasUpWindow BOOLEAN(255) NOT NULL,
     data VARCHAR(1024) NULL,
     equation VARCHAR(1024) NULL,
     create_time TIMESTAMP NOT NULL,
@@ -208,13 +209,14 @@ async function seedOrders() {
     const createTable = await sql`
     CREATE TABLE IF NOT EXISTS orders (
     id BIGSERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id int not null,
     format_id BIGINT NOT NULL,
     format_name VARCHAR(255) NOT NULL,
-
+    count int not null,
     note VARCHAR(255) NOT NULL,
     width NUMERIC(5, 1) NOT NULL,
     height NUMERIC(5, 1) NOT NULL,
+    total_price NUMERIC(8, 1),
 
     create_time TIMESTAMP NOT NULL,
     delete_time TIMESTAMP

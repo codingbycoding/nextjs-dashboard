@@ -49,6 +49,7 @@ const FormatEntryVar = ({ format } : { format: Format }) => {
           <tr>
             <th>日期</th>
             <th>类型名称</th>
+            <th>上亮</th>
             {
     Object.entries(format.equation).map(([key]) => (
       <th key={key}>
@@ -64,6 +65,7 @@ const FormatEntryVar = ({ format } : { format: Format }) => {
           <tr>
             <td>{ formatDateTime(format.createTime) }</td>
             <td>{ format.name }</td>
+            <td>{ format.hasUpWindows ? '有上亮' : '无上亮'}</td>
             {
     Object.entries(format.equation).map(([key, value]) => (
       <th key={key}>

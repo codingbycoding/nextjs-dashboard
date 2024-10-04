@@ -3,7 +3,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Button } from 'antd'
+import { Button, Checkbox } from 'antd'
 import axios from 'axios'
 
 import {
@@ -28,6 +28,7 @@ const colorOpts = [] as Option[]
 export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }) {
   const [selectedCustomer, setSelectedCustomer] = useState(undefined as unknown as Customer)
   const [selectedFormat, setSelectedFormat] = useState(undefined as unknown as Format)
+  const [selectedFormatName, setSelectedFormatName] = useState<string>('')
 
   const [selectedColorOpt, setColorSelectedOpt] = useState<string>('')
   const [selectedGlassOpt, setGlassSelectedOpt] = useState<string>('')
@@ -37,6 +38,11 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
 
   const [宽, set宽] = useState<string>('')
   const [高, set高] = useState<string>('')
+  const [上亮玻璃高, set上亮玻璃高] = useState<string>('')
+  const [中柱数, set中柱数] = useState<string>('')
+
+  const [hasUpWindows, setHasUpWindows] = useState<boolean>(true)
+
   const [widthError, setWidthError] = useState<string>('')
   const [heightError, setHeightError] = useState<string>('')
 
@@ -49,8 +55,25 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     setSelectedCustomer(dbCustomers.find((customer) => customer.name === event.target.value) as Customer)
   }
 
+  const updateSelectedFormat = (has? : boolean) => {
+    console.log(`dbFormats:${dbFormats} selectedFormatName:${selectedFormatName} has:${has}` )
+    dbFormats.forEach((f) =>  { console.log(`forEach: f.name:${f.name} f.equation:${f.equation}`) })
+
+    if(has === undefined) {
+      has = hasUpWindows
+    }
+
+    setSelectedFormat(dbFormats.find((format) => format.name === selectedFormatName && format.hasUpWindows === has) as Format)
+  }
+
+  const updateHasUpWindows = (has : boolean) => {
+    setHasUpWindows(has)
+    updateSelectedFormat(has)
+  }
+
   const handleFormatOptChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedFormat(dbFormats.find((format) => format.name === event.target.value) as Format)
+    setSelectedFormatName(event.target.value)
+    updateSelectedFormat()
   }
 
   const handleColorOptChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -85,11 +108,32 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
     }
   }
 
+  const handleUpWindowsHeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    if (value && Number.isNaN(parseFloat(value))) {
+      setHeightError('请输入有效的数字')
+    } else {
+      setHeightError('')
+      set上亮玻璃高(value)
+    }
+  }
+
+  const handleUpMiddleNumberChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target
+    if (value && Number.isNaN(parseFloat(value))) {
+      setHeightError('请输入有效的数字')
+    } else {
+      setHeightError('')
+      set中柱数(value)
+    }
+  }
+
   const calcOrder = () => {
     const order = {
       formatName: selectedFormat?.name ?? '',
       customerID: selectedCustomer?.id,
       note,
+      count: 1,
       formatID: 0,
       width: parseFloat(宽),
       height: parseFloat(高),
@@ -112,15 +156,64 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
       { k: '正面玻璃类型', v: selectedGlassOpt ?? '' },
       { k: '背面玻璃类型', v: selectedGlassFOpt ?? '' }]
 
+    if (hasUpWindows) {
+    order.equation = [
+      ...(order.equation as object[] || []),
+      { k: '上亮玻璃高', v: 上亮玻璃高 ?? '' },
+      { k: '中柱数', v: 中柱数 ?? '' }]
+    }
+
     // Use reduce instead of map to avoid creating a new object in each iteration
+let updatedOrder
+if(hasUpWindows) {
+  console.log(`中柱数:${中柱数 }`)
+
+  if (中柱数 === '0') {
+      updatedOrder = Object.entries(selectedFormat.equation as object[]).reduce(
+        (acc, [key, value]) => {
+          const val = (new Function('宽', '高', '上亮玻璃高', '中柱数', `return Number(${value})`))(Number(宽), Number(高), Number(上亮玻璃高), Number(中柱数))
+          if(key.includes('中柱数大于0')) {
+            return acc
+          } else {
+          return { ...acc, equation: [...(acc.equation as object[] || []), { k: key, v: val }] }
+        }},
+        order,
+      )
+    } else if( 中柱数 > '0') {
+      updatedOrder = Object.entries(selectedFormat.equation as object[]).reduce(
+        (acc, [key, value]) => {
+          const val = (new Function('宽', '高', '上亮玻璃高', '中柱数', `return Number(${value})`))(Number(宽), Number(高), Number(上亮玻璃高), Number(中柱数))
+          if(key.includes('中柱数等于0')) {
+            return acc
+          } else {
+          return { ...acc, equation: [...(acc.equation as object[] || []), { k: key, v: val }] }
+        }},
+        order,
+      )
+    }
+  } else {
+    updatedOrder = Object.entries(selectedFormat.equation as object[]).reduce(
+      (acc, [key, value]) => {
+        const val = (new Function('宽', '高', '上亮玻璃高', '中柱数', `return Number(${value})`))(Number(宽), Number(高), Number(上亮玻璃高), Number(中柱数))
+        console.log(`key:${key}`)
+        if(key.includes('中柱数')) {
+            return acc
+          } else {
+          return { ...acc, equation: [...(acc.equation as object[] || []), { k: key, v: val }] }
+        }},
+        order,
+    )
+  }
+
+  /*
     const updatedOrder = Object.entries(selectedFormat.equation as object[]).reduce(
       (acc, [key, value]) => {
-        const val = (new Function('宽', '高', `return Number(${value})`))(Number(宽), Number(高))
+        const val = (new Function('宽', '高', '上亮玻璃高', '中柱数', `return Number(${value})`))(Number(宽), Number(高), Number(上亮玻璃高), Number(中柱数))
         return { ...acc, equation: [...(acc.equation as object[] || []), { k: key, v: val }] }
       },
       order,
     )
-
+*/
     console.log('order:', updatedOrder)
     return updatedOrder
   }
@@ -228,7 +321,9 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
           const newFormats = res.data.formats.map((format: Format) => {
             try {
               format.equation = JSON.parse(format.equation as string) as object[]
-              formatOpts.push({ value: format.name, label: format.name })
+              if (!formatOpts.some((item) => item.label === format.name)) {
+                formatOpts.push({ value: format.name, label: format.name })
+              }
               return format
             } catch (err) {
               console.error('Error parsing equation:', err)
@@ -237,6 +332,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
           })
 
           console.log('options:', formatOpts)
+          console.log('newFormats:', newFormats)
+          setSelectedFormatName(newFormats[0].name)
           setSelectedFormat(newFormats[0])
           setDbFormats(newFormats)
         }
@@ -320,6 +417,8 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         </select>
       </div>
 
+      <Checkbox defaultChecked onChange={(e) => updateHasUpWindows(e.target.checked)}>有上亮</Checkbox>
+
       <div
         className="column"
         style={{
@@ -390,8 +489,33 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
         {heightError && <span style={{ color: 'red' }}>{heightError}</span>}
       </div>
 
+      {hasUpWindows && (
+            <><div
+                className="column"
+                style={{
+                  flex: 1, padding: 5, maxWidth: 100, boxSizing: 'border-box',
+                }}
+              >
+                <label htmlFor={`up-windows-height-${idd}`}>上亮玻璃高</label>
+                <input type="text" id={`up-windows-height-${idd}`} style={{ maxWidth: 80 }} value={上亮玻璃高} onChange={handleUpWindowsHeightChange} />
+                {heightError && <span style={{ color: 'red' }}>{heightError}</span>}
+              </div><div
+                className="column"
+                style={{
+                  flex: 1, padding: 5, maxWidth: 100, boxSizing: 'border-box',
+                }}
+              >
+                  <label htmlFor={`up-windows-number-${idd}`}>中柱数</label>
+                  <input type="text" id={`up-windows-number-${idd}`} style={{ maxWidth: 80 }} value={中柱数} onChange={handleUpMiddleNumberChange} />
+                  {heightError && <span style={{ color: 'red' }}>{heightError}</span>}
+                </div></>
+      )}
+
       {selectedFormat && selectedFormat.equation ? (
         Object.entries(selectedFormat.equation).map(([key, value]) => (
+
+          (key.includes('中柱数大于0')  &&  中柱数 === '0') || (key.includes('中柱数等于0')  &&  中柱数 > '0') ? <></> :
+
           <div
             key={key}
             className="column"
@@ -404,7 +528,7 @@ export default function CalcCustom({ idd, userID }:{ idd:number; userID:number }
             }}
           >
             <label htmlFor={key}>{key}</label>
-            <output id={key}>{高 !== '' && 宽 !== '' && (new Function('宽', '高', `return Number(${value})`))(Number(宽), Number(高))}</output>
+            <output id={key}>{高 !== '' && 宽 !== '' && (new Function('宽', '高', '上亮玻璃高', '中柱数', `return Number(${value})`))(Number(宽), Number(高), Number(上亮玻璃高), Number(中柱数))}</output>
           </div>
         ))
       ) : (

@@ -44,18 +44,21 @@ export const formats : Format[] = [
   {
     name: '打85移门料子',
     userID: ids[0],
+    hasUpWindows: false,
     equation: '',
     createTime: new Date('2023-11-14 12:00:01'),
   },
   {
     name: '极窄双扇1635',
     userID: ids[0],
+    hasUpWindows: false,
     equation: '',
     createTime: new Date('2024-01-14 12:00:01'),
   },
   {
     name: '极窄三联动1635(不锈钢下轨)',
     userID: ids[0],
+    hasUpWindows: false,
     equation: '',
     createTime: new Date('2024-02-14 12:00:01'),
   },
@@ -111,6 +114,7 @@ export const orders : Order[] = [
     formatName: '',
     equation: '',
     encoded_equation: '',
+    status: 1,
   },
   {
     id: 10001,
@@ -126,6 +130,7 @@ export const orders : Order[] = [
     formatName: '',
     equation: '',
     encoded_equation: '',
+    status: 1,
   },
   {
     id: 10002,
@@ -141,5 +146,6 @@ export const orders : Order[] = [
     formatName: '',
     equation: '',
     encoded_equation: '',
+    status: 1,
   },
 ]

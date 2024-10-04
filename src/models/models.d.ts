@@ -43,6 +43,7 @@ export type Format = {
   id?: number;
   userID: number;
   name: string;
+  hasUpWindows: boolean;
   equation: object[] | string;
   createTime?: Date;
   deleteTime?: Date;
@@ -60,9 +61,11 @@ export type Order = {
   formatID: number;
   formatName: string;
   note: string;
+  count: number;
   width: number;
   height: number;
   status: number;
+  totalPrice: number;
   equation: object[] | string;
   encoded_equation: string;
   createTime: Date;

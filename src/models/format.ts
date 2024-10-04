@@ -14,6 +14,7 @@ export async function getFormats(user_id: number) : Promise<Format[]> {
       id: row.id,
       userID: row.user_id,
       name: row.name,
+      hasUpWindows: row.has_up_windows,
       equation: row.equation,
       createTime: row.create_time,
       deleteTime: row.delete_time,
@@ -33,8 +34,8 @@ export async function addFormat(format: Format) : Promise<boolean> {
     : JSON.stringify(format.equation)
 
   await sql`
-        INSERT INTO formats (user_id, name, equation, create_time)
-        VALUES (${format.userID}, ${format.name}, ${serializedEquation}, now());
+        INSERT INTO formats (user_id, name, has_up_windows, equation, create_time)
+        VALUES (${format.userID}, ${format.name}, ${format.hasUpWindows}, ${serializedEquation}, now());
       `
   return true
 }
